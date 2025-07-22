@@ -8,7 +8,7 @@ import { IoSettingsOutline } from 'react-icons/io5';
 import { FiLogOut } from 'react-icons/fi';
 
 import { useNavigate, useLocation } from 'react-router-dom';
-import type { Sidebar as SidebarData } from '../../common/interfaces/Sidebar.interface';
+import type { Sidebar as SidebarData } from '../../interfaces/Sidebar.interface';
 
 const sidebarItems: SidebarData[] = [
   { label: 'Dashboard', icon: <RiHome9Line />, to: '/' },
