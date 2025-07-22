@@ -1,13 +1,12 @@
-import React from 'react';
-import type { TableContentProps } from '../../common/interfaces/TableRow.interface';
+import type { TableContentProps, TableRow } from "../../common/interfaces/TableRow.interface";
 
-const TableContent: React.FC<TableContentProps> = ({
+const TableContent = <T extends TableRow>({
   data,
   columns,
   selectedItem,
   onRowClick,
   getStatusColor
-}) => {
+}: TableContentProps<T>) => {
   return (
     <div className="bg-white rounded-lg shadow overflow-x-auto">
       <table className="w-full">

@@ -26,10 +26,23 @@ export interface ColumnDef {
   widthClass?: string;
 }
 
-export interface TableContentProps {
-  data: TableRow[];
+export interface FormError {
+  name?: string;
+  email?: string;
+  password?: string;
+  err?: string;
+}
+
+
+export interface TableContentProps<T extends TableRow = TableRow> {
+  data: T[];
   columns: ColumnDef[];
-  selectedItem?: TableRow | null;
-  onRowClick?: (item: TableRow) => void;
+  selectedItem?: T | null;
+  onRowClick?: (item: T) => void;
   getStatusColor?: (status: string) => string;
+}
+
+export interface UIProductRow extends Omit<TableRow, 'category_id'> {
+  category_id?: string; // giữ lại để tương thích
+  category_name: string;
 }

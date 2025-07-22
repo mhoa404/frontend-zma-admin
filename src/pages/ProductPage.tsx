@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import TableContent from '../components/TableContent';
 import { RightDetailPanel } from '../components/RightDetailPanel';
-import type { TableRow, ColumnDef } from '../common/interfaces/TableRow.interface';
+import type { TableRow, ColumnDef, UIProductRow } from '../common/interfaces/TableRow.interface';
 import { BACKEND_API } from '../scripts/api';
 
 const getStatusColor = (available: boolean) => {
@@ -10,40 +10,35 @@ const getStatusColor = (available: boolean) => {
 };
 
 const ProductPage = () => {
-  const [products, setProducts] = useState<TableRow[]>([]);
-  const [selectedItem, setSelectedItem] = useState<TableRow | null>(null);
-  const [, setCategories] = useState<{ _id: string; name: string }[]>([]);
+  const [products, setProducts] = useState<UIProductRow[]>([]);
+  const [selectedItem, setSelectedItem] = useState<UIProductRow | null>(null);
+
+  type ProductWithPopulatedCategory = Omit<TableRow, 'category_id'> & {
+    category_id: {
+      _id: string;
+      name: string;
+      is_active?: boolean;
+    };
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('access_token');
 
-        const [productRes, categoryRes] = await Promise.all([
-          fetch(`${BACKEND_API}/products`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }),
-          fetch(`${BACKEND_API}/categories`),
-        ]);
-
-        const productsData = await productRes.json();
-        const categoriesData = await categoryRes.json();
-
-        setCategories(categoriesData);
-
-        const mapped: TableRow[] = productsData.map((item: TableRow) => {
-          const category = categoriesData.find(
-            (c: { _id: string | undefined }) => c._id === item.category_id
-          );
-          return {
-            ...item,
-            description: item.description || 'Không có mô tả',
-            img_url: item.img_url || '',
-            category_name: category?.name || 'Không rõ danh mục',
-          };
+        const res = await fetch(`${BACKEND_API}/products`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
+
+        const productsData = await res.json();
+
+        const mapped: UIProductRow[] = (productsData as ProductWithPopulatedCategory[]).map((item) => ({
+          ...item,
+          category_id: item.category_id._id,
+          category_name: item.category_id?.name || 'Không rõ danh mục',
+          description: item.description || 'Không có mô tả',
+          img_url: item.img_url || '',
+        }));
 
         setProducts(mapped);
       } catch (error) {
@@ -94,11 +89,7 @@ const ProductPage = () => {
 
   return (
     <>
-      <div
-        className={`transition-all duration-300 ease-in-out ${
-          selectedItem ? 'w-[calc(100%-320px)]' : 'w-full'
-        }`}
-      >
+      <div className={`transition-all duration-300 ease-in-out ${selectedItem ? 'w-[calc(100%-320px)]' : 'w-full'}`}>
         <Header activeMenu="Products" />
       </div>
 
