@@ -1,12 +1,15 @@
 export interface TableRow {
   _id: string | number;
   name?: string;
+  email?: string;
+  phone?: string;
+  role?: string;
   status?: string;
   value?: string;
   date?: string;
   orderId?: string;
   category_id?: string;
-  category_name?:string;
+  category_name?: string;
   description?: string;
   img_url?: string;
   price?: number;
@@ -17,7 +20,6 @@ export interface TableRow {
   rating?: number;
   is_active?: boolean;
 }
-
 
 export interface ColumnDef {
   header: string;
@@ -33,7 +35,6 @@ export interface FormError {
   err?: string;
 }
 
-
 export interface TableContentProps<T extends TableRow = TableRow> {
   data: T[];
   columns: ColumnDef[];
@@ -43,6 +44,6 @@ export interface TableContentProps<T extends TableRow = TableRow> {
 }
 
 export interface UIProductRow extends Omit<TableRow, 'category_id'> {
-  category_id?: string; // giữ lại để tương thích
+  category_id?: string;
   category_name: string;
 }

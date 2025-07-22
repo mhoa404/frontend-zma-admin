@@ -6,20 +6,29 @@ import CustomerPage from './pages/CustomerPage';
 import ShipperPage from './pages/ShipperPage';
 import OrderPage from './pages/OrderPage';
 import HomePage from './pages/HomePage';
-import AuthPage from './pages/AuthPage';
+import LoginPage from './pages/LoginPage';
+import RedirectIfAuth from './components/RedirectIfAuth.tsx';
+import RegisterPage from './pages/RegisPage';
+import RequireAuth from './components/RequireAuth';
+
 
 const App = () => (
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<AuthPage />} />
-      {/* Các route khác dùng chung Layout */}
-      <Route element={<Layout />}>
-        <Route path="home"       element={<HomePage />} />
-        <Route path="products"   element={<ProductPage />} />
-        <Route path="categories" element={<CategoryPage />} />
-        <Route path="customers"  element={<CustomerPage />} />
-        <Route path="shippers"   element={<ShipperPage />} />
-        <Route path="orders"     element={<OrderPage />} />
+      <Route element={<RedirectIfAuth />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Route>
+
+      <Route element={<RequireAuth />}>
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/products" element={<ProductPage />} />
+          <Route path="/categories" element={<CategoryPage />} />
+          <Route path="/customers" element={<CustomerPage />} />
+          <Route path="/shippers" element={<ShipperPage />} />
+          <Route path="/orders" element={<OrderPage />} />
+        </Route>
       </Route>
     </Routes>
   </BrowserRouter>

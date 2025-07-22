@@ -11,7 +11,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import type { Sidebar as SidebarData } from '../../common/interfaces/Sidebar.interface';
 
 const sidebarItems: SidebarData[] = [
-  { label: 'Dashboard', icon: <RiHome9Line />, to: '/home' },
+  { label: 'Dashboard', icon: <RiHome9Line />, to: '/' },
   { label: 'Products', icon: <AiOutlineProduct />, to: '/products' },
   { label: 'Categories', icon: <BiCategory />, to: '/categories' },
   { label: 'Customers', icon: <MdOutlinePeopleAlt />, to: '/customers' },
@@ -20,12 +20,17 @@ const sidebarItems: SidebarData[] = [
   { label: 'Notification', icon: <FaRegBell />, to: '/notification' },
   { label: 'Help', icon: <LuCircleHelp />, to: '/help' },
   { label: 'Settings', icon: <IoSettingsOutline />, to: '/settings' },
-  { label: 'Logout', icon: <FiLogOut />, to: '/logout' },
+  { label: 'Logout', icon: <FiLogOut />, to: '/login' }, 
 ];
 
-export const Sidebar = ({ resetSelectedItem }: { resetSelectedItem: () => void }) => {
+const Sidebar = ({ resetSelectedItem }: { resetSelectedItem: () => void }) => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    navigate('/login');
+  };
 
   return (
     <div className="w-64 bg-slate-800 text-white flex flex-col">
@@ -47,8 +52,7 @@ export const Sidebar = ({ resetSelectedItem }: { resetSelectedItem: () => void }
                   onClick={() => {
                     resetSelectedItem();
                     if (item.label === 'Logout') {
-                      localStorage.removeItem('access_token');
-                      navigate('/');
+                      handleLogout();
                     } else {
                       navigate(item.to);
                     }
@@ -56,7 +60,7 @@ export const Sidebar = ({ resetSelectedItem }: { resetSelectedItem: () => void }
                   className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors focus:outline-none ${
                     isActive
                       ? 'bg-white text-slate-800'
-                      : 'bg-transparent text-slate-400  hover:text-white'
+                      : 'bg-transparent text-slate-400 hover:text-white'
                   }`}
                 >
                   {item.icon}
@@ -70,3 +74,5 @@ export const Sidebar = ({ resetSelectedItem }: { resetSelectedItem: () => void }
     </div>
   );
 };
+
+export default Sidebar
