@@ -6,9 +6,10 @@ import type { TableRow } from '../../interfaces/TableRow.interface'
 interface Props {
   selectedItem: TableRow
   onClose: () => void
+  onDelete?: (id: string) => void
 }
 
-const ProductDetailPanel: React.FC<Props> = ({ selectedItem, onClose }) => {
+const ProductDetailPanel: React.FC<Props> = ({ onDelete, selectedItem, onClose }) => {
   const {
     name = '',
     description = '',
@@ -83,7 +84,7 @@ const ProductDetailPanel: React.FC<Props> = ({ selectedItem, onClose }) => {
 
       <div className="p-6 border-t border-gray-200">
         <div className="flex space-x-3">
-          <button type="button" className="flex-1 border-2 border-red-600 text-red-600 py-2 px-4 rounded-lg hover:bg-red-600 hover:text-white">Xoá</button>
+          <button onClick={() => onDelete?.(selectedItem._id.toString())} type="button" className="flex-1 border-2 border-red-600 text-red-600 py-2 px-4 rounded-lg hover:bg-red-600 hover:text-white">Xoá</button>
           <button type="button" className="flex-1 border-2 border-gray-900 text-gray-900 py-2 px-4 rounded-lg hover:bg-slate-700 hover:text-white">Sửa</button>
         </div>
       </div>

@@ -22,3 +22,14 @@ export const fetchUsers = async (): Promise<TableRow[]> => {
 
   return data
 }
+
+export const deleteUser = async (id: string) => {
+  const token = localStorage.getItem('access_token')
+  const res = await fetch(`${BACKEND_API}/users/${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!res.ok) throw new Error('Xoá user thất bại')
+  return res.json()
+}
+

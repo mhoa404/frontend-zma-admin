@@ -4,9 +4,10 @@ import type { TableRow } from '../../interfaces/TableRow.interface'
 interface Props {
   selectedItem: TableRow
   onClose: () => void
+  onDelete?: (id: string) => void
 }
 
-const UserDetailPanel = ({ selectedItem, onClose }: Props) => {
+const UserDetailPanel = ({ onDelete, selectedItem, onClose }: Props) => {
   return (
     <div className="flex flex-col h-full">
       <div className="pl-3 h-20 border-b border-gray-200">
@@ -45,7 +46,7 @@ const UserDetailPanel = ({ selectedItem, onClose }: Props) => {
 
       <div className="p-6 border-t border-gray-200">
         <div className="flex space-x-3">
-          <button className="flex-1 border-2 border-red-600 text-red-600 py-2 px-4 rounded-lg hover:bg-red-600 hover:text-white">Xoá</button>
+          <button onClick={() => onDelete?.(selectedItem._id.toString())} className="flex-1 border-2 border-red-600 text-red-600 py-2 px-4 rounded-lg hover:bg-red-600 hover:text-white">Xoá</button>
           <button className="flex-1 border-2 border-gray-900 text-gray-900 py-2 px-4 rounded-lg hover:bg-slate-700 hover:text-white">Sửa</button>
         </div>
       </div>

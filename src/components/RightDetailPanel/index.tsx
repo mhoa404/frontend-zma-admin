@@ -10,17 +10,18 @@ interface Props {
   activeMenu: string
   getStatusColor: (status: boolean) => string
   onClose: () => void
+  onDelete: (id: string) => void
 }
 
-export const RightDetailPanel: React.FC<Props> = ({ selectedItem, activeMenu, getStatusColor, onClose }) => {
+export const RightDetailPanel: React.FC<Props> = ({ selectedItem, activeMenu, getStatusColor, onClose, onDelete }) => {
   if (!selectedItem) return null
 
   switch (activeMenu) {
     case 'Users':
-      return <UserDetailPanel selectedItem={selectedItem} onClose={onClose} />
+      return <UserDetailPanel selectedItem={selectedItem} onClose={onClose} onDelete={onDelete} />
     case 'Categories':
-      return <CategoryDetailPanel selectedItem={selectedItem} getStatusColor={getStatusColor} onClose={onClose} />
+      return <CategoryDetailPanel selectedItem={selectedItem} getStatusColor={getStatusColor} onClose={onClose} onDelete={onDelete} />
     default:
-      return <ProductDetailPanel selectedItem={selectedItem} onClose={onClose} />
+      return <ProductDetailPanel selectedItem={selectedItem} onClose={onClose} onDelete={onDelete} />
   }
 }
