@@ -9,6 +9,14 @@ type ProductWithPopulatedCategory = Omit<UIProductRow, 'category_id' | 'category
   };
 };
 
+export interface UpdateProductPayload {
+  name: string;
+  price: number;
+  sale_price?: number;
+  description?: string;
+  category_id: string;
+}
+
 // Lấy danh sách sản phẩm
 export const fetchProducts = async (): Promise<UIProductRow[]> => {
   const token = localStorage.getItem('access_token');
@@ -63,4 +71,19 @@ export const createProduct = async (product: {
   });
 
   return res.data;
+};
+
+export const updateProduct = async (id: string, data: UpdateProductPayload) => {
+  const token = localStorage.getItem('access_token');
+  const res = await fetch(`${BACKEND_API}/products/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) throw new Error('Cập nhật sản phẩm thất bại');
+  return await res.json();
 };

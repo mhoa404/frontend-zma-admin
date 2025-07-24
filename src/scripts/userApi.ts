@@ -48,4 +48,19 @@ export const createUser = async (data: {
   return res.data;
 };
 
+export const updateUser = async (id: string, data: Partial<{ name: string; phone?: string; zalo_id?: string; password?: string }>) => {
+  const token = localStorage.getItem('access_token');
+  const res = await fetch(`${BACKEND_API}/users/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) throw new Error('Cập nhật người dùng thất bại');
+  return await res.json();
+};
+
 

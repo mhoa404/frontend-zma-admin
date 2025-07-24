@@ -4,7 +4,12 @@ import TbodyProducts from '../components/Table/TBodyProduct';
 import { getStatusColor } from '../utils/statusColor';
 import { RightDetailPanel } from '../components/RightDetailPanel';
 import type { ColumnDef, TableRow, UIProductRow } from '../interfaces/TableRow.interface';
-import { createProduct, deleteProduct, fetchProducts } from '../scripts/productApi';
+import {
+  createProduct,
+  deleteProduct,
+  fetchProducts,
+  updateProduct,
+} from '../scripts/productApi';
 import { fetchCategories } from '../scripts/categoryApi';
 import Search from '../components/Search';
 import FormModal from '../components/FormModal';
@@ -21,6 +26,7 @@ const ProductPage = () => {
   const [selectedItem, setSelectedItem] = useState<UIProductRow | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     name: '',
@@ -64,22 +70,14 @@ const ProductPage = () => {
   const handleFormChange = (field: keyof typeof form, value: string) => {
     setForm(prev => ({
       ...prev,
-      [field]:
-        field === 'price' || field === 'sale_price'
-          ? Number(value)
-          : field === 'name'
-            ? value.trim()
-            : value,
+      [field]: field === 'price' || field === 'sale_price' ? Number(value) : value,
     }));
   };
 
   const handleEditFormChange = (field: keyof typeof editForm, value: string) => {
     setEditForm(prev => ({
       ...prev,
-      [field]:
-        field === 'price' || field === 'sale_price'
-          ? Number(value)
-          : value,
+      [field]: field === 'price' || field === 'sale_price' ? Number(value) : value,
     }));
   };
 
@@ -91,10 +89,10 @@ const ProductPage = () => {
 
     try {
       await createProduct({
-        name: form.name,
+        name: form.name.trim(),
         price: Number(form.price),
         sale_price: form.sale_price ? Number(form.sale_price) : undefined,
-        description: form.description || undefined,
+        description: form.description?.trim() || undefined,
         category_id: form.category_id,
       });
 
@@ -104,6 +102,31 @@ const ProductPage = () => {
       await loadProducts();
     } catch (error) {
       console.error('Lỗi khi tạo sản phẩm:', error);
+      alert(parseAxiosError(error));
+    }
+  };
+
+  const handleUpdateProduct = async () => {
+    if (!editingId) {
+      alert('❌ Không tìm thấy sản phẩm để cập nhật');
+      return;
+    }
+
+    try {
+      await updateProduct(editingId, {
+        name: editForm.name.trim(),
+        price: Number(editForm.price),
+        sale_price: editForm.sale_price ? Number(editForm.sale_price) : undefined,
+        description: editForm.description?.trim() || undefined,
+        category_id: editForm.category_id,
+      });
+
+      alert('✅ Cập nhật sản phẩm thành công');
+      setShowEditModal(false);
+      setEditingId(null);
+      await loadProducts();
+    } catch (error) {
+      console.error('❌ Cập nhật sản phẩm thất bại', error);
       alert(parseAxiosError(error));
     }
   };
@@ -132,10 +155,10 @@ const ProductPage = () => {
       description: product.description || '',
       category_id: product.category_id || '',
     });
+
+    setEditingId(product._id ? String(product._id) : null);
     setShowEditModal(true);
   };
-
-
 
   const columns: ColumnDef[] = [
     { header: 'Image', field: 'img_url' },
@@ -179,8 +202,9 @@ const ProductPage = () => {
       </div>
 
       <main
-        className={`p-6 transition-all duration-300 ease-in-out ${selectedItem ? 'w-[calc(100%-320px)]' : 'w-full'
-          }`}
+        className={`p-6 transition-all duration-300 ease-in-out ${
+          selectedItem ? 'w-[calc(100%-320px)]' : 'w-full'
+        }`}
       >
         <TableComponent
           columns={columns}
@@ -192,8 +216,9 @@ const ProductPage = () => {
       </main>
 
       <div
-        className={`w-80 h-full bg-white border-l border-gray-200 fixed right-0 top-0 z-50 transform transition-transform duration-300 ${selectedItem ? 'translate-x-0' : 'translate-x-full'
-          }`}
+        className={`w-80 h-full bg-white border-l border-gray-200 fixed right-0 top-0 z-50 transform transition-transform duration-300 ${
+          selectedItem ? 'translate-x-0' : 'translate-x-full'
+        }`}
       >
         <RightDetailPanel
           selectedItem={selectedItem}
@@ -201,11 +226,10 @@ const ProductPage = () => {
           getStatusColor={getStatusColor}
           onClose={() => setSelectedItem(null)}
           onDelete={handleDelete}
-          onEdit={handleStartEdit} // ✅ sử dụng onEdit
+          onEdit={handleStartEdit}
         />
       </div>
 
-      {/* Modal tạo */}
       {showModal && (
         <FormModal<typeof form>
           mode="add"
@@ -230,7 +254,6 @@ const ProductPage = () => {
         />
       )}
 
-      {/* Modal sửa */}
       {showEditModal && (
         <FormModal<typeof editForm>
           mode="edit"
@@ -250,11 +273,11 @@ const ProductPage = () => {
             },
           ]}
           onChange={handleEditFormChange}
-          onSubmit={() => {
-            alert('📌 TODO: Gửi API cập nhật sản phẩm tại đây');
+          onSubmit={handleUpdateProduct}
+          onClose={() => {
             setShowEditModal(false);
+            setEditingId(null);
           }}
-          onClose={() => setShowEditModal(false)}
         />
       )}
     </div>

@@ -8,6 +8,7 @@ import {
   fetchCategories,
   deleteCategory,
   createCategory,
+  updateCategory,
 } from '../scripts/categoryApi';
 import Search from '../components/Search';
 import FormModal from '../components/FormModal';
@@ -17,6 +18,7 @@ const CategoryPage = () => {
   const [selectedItem, setSelectedItem] = useState<TableRow | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null); // ✅
 
   const [form, setForm] = useState({ name: '' });
   const [editForm, setEditForm] = useState({ name: '' });
@@ -50,6 +52,7 @@ const CategoryPage = () => {
 
   const handleStartEdit = (item: TableRow) => {
     setEditForm({ name: item.name || '' });
+    setEditingId(item._id?.toString() || null); 
     setShowEditModal(true);
   };
 
@@ -68,6 +71,30 @@ const CategoryPage = () => {
       await loadCategories();
     } catch (error) {
       alert('❌ Thêm danh mục thất bại');
+      console.error(error);
+    }
+  };
+
+  const handleUpdateCategory = async () => {
+    const name = editForm.name.trim();
+    if (!name) {
+      alert('⚠️ Vui lòng nhập tên danh mục');
+      return;
+    }
+
+    if (!editingId) {
+      alert('❌ Không tìm thấy ID danh mục để cập nhật');
+      return;
+    }
+
+    try {
+      await updateCategory(editingId, { name });
+      alert('✅ Cập nhật danh mục thành công');
+      setShowEditModal(false);
+      setEditingId(null);
+      await loadCategories();
+    } catch (error) {
+      alert('❌ Cập nhật thất bại');
       console.error(error);
     }
   };
@@ -148,11 +175,10 @@ const CategoryPage = () => {
           getStatusColor={getStatusColor}
           onClose={() => setSelectedItem(null)}
           onDelete={handleDelete}
-          onEdit={handleStartEdit} // ✅ truyền onEdit
+          onEdit={handleStartEdit}
         />
       </div>
 
-      {/* Modal Thêm */}
       {showModal && (
         <FormModal<typeof form>
           mode="add"
@@ -168,7 +194,6 @@ const CategoryPage = () => {
         />
       )}
 
-      {/* Modal Sửa */}
       {showEditModal && (
         <FormModal<typeof editForm>
           mode="edit"
@@ -177,11 +202,11 @@ const CategoryPage = () => {
           form={editForm}
           fields={[{ key: 'name', label: 'Category Name' }]}
           onChange={handleEditFormChange}
-          onSubmit={() => {
-            alert('📌 TODO: Gửi API cập nhật danh mục tại đây');
+          onSubmit={handleUpdateCategory} 
+          onClose={() => {
             setShowEditModal(false);
+            setEditingId(null);
           }}
-          onClose={() => setShowEditModal(false)}
         />
       )}
     </div>

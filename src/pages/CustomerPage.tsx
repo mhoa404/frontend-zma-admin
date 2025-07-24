@@ -4,9 +4,13 @@ import TbodyUsers from '../components/Table/TbodyUsers';
 import { RightDetailPanel } from '../components/RightDetailPanel';
 import { formatDate } from '../utils/formatDate';
 import type { ColumnDef, TableRow } from '../interfaces/TableRow.interface';
-import { createUser, fetchUsers, deleteUser } from '../scripts/userApi';
+import {
+  createUser,
+  fetchUsers,
+  deleteUser,
+  updateUser,
+} from '../scripts/userApi';
 import Search from '../components/Search';
-
 import type { AxiosErrorResponse } from '../interfaces/AxiosError.interface';
 import FormModal from '../components/FormModal';
 
@@ -15,6 +19,7 @@ const CustommerPage = () => {
   const [selectedItem, setSelectedItem] = useState<TableRow | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     name: '',
@@ -26,11 +31,11 @@ const CustommerPage = () => {
   const [editForm, setEditForm] = useState<typeof form>(form);
 
   const handleFormChange = (field: string, value: string) => {
-    setForm(prev => ({ ...prev, [field]: value }));
+    setForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleEditFormChange = (field: string, value: string) => {
-    setEditForm(prev => ({ ...prev, [field]: value }));
+    setEditForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleStartEdit = (item: TableRow) => {
@@ -40,6 +45,7 @@ const CustommerPage = () => {
       password: '',
       role: item.role || 'user',
     });
+    setEditingId(item._id?.toString() || null);
     setShowEditModal(true);
   };
 
@@ -54,6 +60,35 @@ const CustommerPage = () => {
       const error = err as AxiosErrorResponse;
       console.error(error);
       alert(error.response?.data?.message || '❌ Tạo tài khoản thất bại');
+    }
+  };
+
+  const handleUpdateUser = async () => {
+    if (!editingId) {
+      alert('❌ Không tìm thấy ID người dùng cần cập nhật');
+      return;
+    }
+
+    const payload: {
+      name: string;
+      password?: string;
+      phone?: string;
+      zalo_id?: string;
+    } = {
+      name: editForm.name,
+    };
+
+    if (editForm.password) payload.password = editForm.password;
+
+    try {
+      await updateUser(editingId, payload);
+      alert('✅ Cập nhật người dùng thành công');
+      setShowEditModal(false);
+      setEditingId(null);
+      await loadUsers();
+    } catch (error) {
+      console.error(error);
+      alert('❌ Cập nhật người dùng thất bại');
     }
   };
 
@@ -99,8 +134,9 @@ const CustommerPage = () => {
       field: 'role',
       render: (item) => (
         <span
-          className={`text-white px-2 py-1 rounded text-xs font-medium
-            ${item.role === 'admin' ? 'bg-red-500' : 'bg-blue-500'}`}
+          className={`text-white px-2 py-1 rounded text-xs font-medium ${
+            item.role === 'admin' ? 'bg-red-500' : 'bg-blue-500'
+          }`}
         >
           {item.role === 'admin' ? 'Admin' : 'User'}
         </span>
@@ -114,7 +150,7 @@ const CustommerPage = () => {
   ];
 
   return (
-    <div className="flex flex-col flex-1 overflow-hidden ">
+    <div className="flex flex-col flex-1 overflow-hidden">
       <div className="flex justify-between items-center px-6 pt-6">
         <button
           className="bg-[#1e293b] text-white px-4 py-2 rounded-md hover:bg-gray-700 text-sm"
@@ -150,11 +186,10 @@ const CustommerPage = () => {
           getStatusColor={() => ''}
           onClose={() => setSelectedItem(null)}
           onDelete={handleDelete}
-          onEdit={handleStartEdit} // ✅ truyền onEdit để sửa
+          onEdit={handleStartEdit}
         />
       </div>
 
-      {/* Modal Thêm */}
       {showModal && (
         <FormModal
           mode="add"
@@ -180,15 +215,15 @@ const CustommerPage = () => {
           form={editForm}
           fields={[
             { key: 'name', label: 'Name' },
-            { key: 'email', label: 'Email' },
+            { key: 'email', label: 'Email', readOnly: true }, 
             { key: 'password', label: 'New Password', type: 'password' },
           ]}
           onChange={handleEditFormChange}
-          onSubmit={() => {
-            alert('📌 TODO: Gửi API cập nhật người dùng tại đây');
+          onSubmit={handleUpdateUser}
+          onClose={() => {
             setShowEditModal(false);
+            setEditingId(null);
           }}
-          onClose={() => setShowEditModal(false)}
         />
       )}
     </div>

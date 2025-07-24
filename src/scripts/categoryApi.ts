@@ -1,6 +1,7 @@
 // src/services/categoryApi.ts
 import { BACKEND_API } from '../scripts/api'
 import type { TableRow } from '../interfaces/TableRow.interface'
+import axios from 'axios'
 
 export const fetchCategories = async (): Promise<TableRow[]> => {
   const token = localStorage.getItem('access_token')
@@ -40,5 +41,15 @@ export const createCategory = async (category: { name: string }) => {
 
   if (!res.ok) throw new Error('Tạo danh mục thất bại');
   return res.json();
+};
+
+export const updateCategory = async (id: string, data: { name: string }) => {
+  const token = localStorage.getItem('access_token');
+  const res = await axios.put(`${BACKEND_API}/categories/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
 };
 

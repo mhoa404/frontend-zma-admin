@@ -5,12 +5,11 @@ interface FormModalProps<T extends Record<string, unknown>> {
     label: string;
     type?: 'text' | 'number' | 'password' | 'select';
     options?: { value: string; label: string }[];
+    readOnly?: boolean; // ✅ thêm hỗ trợ readOnly cho từng field
   }[];
   onChange: (field: keyof T, value: string) => void;
   onSubmit: () => void;
   onClose?: () => void;
-
-  // 👇 thêm mới
   mode?: 'add' | 'edit';
   title?: string;
   submitText?: string;
@@ -38,7 +37,7 @@ const FormModal = <T extends Record<string, unknown>>({
         </div>
 
         <div className="p-6 space-y-4">
-          {fields.map(({ key, label, type = 'text', options }) => (
+          {fields.map(({ key, label, type = 'text', options, readOnly }) => (
             <div key={String(key)}>
               <label className="text-sm font-medium text-gray-900 mb-2 block">{label}</label>
               {type === 'select' && options ? (
@@ -55,7 +54,8 @@ const FormModal = <T extends Record<string, unknown>>({
               ) : (
                 <input
                   type={type}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
+                  readOnly={readOnly} 
+                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm ${readOnly ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                   value={form[key] as string | number}
                   onChange={(e) => onChange(key, e.target.value)}
                 />
