@@ -1,12 +1,13 @@
-import type { TableRow } from "../../../interfaces/TableRow.interface";
+import type { ColumnDef, TableRow } from "../../../interfaces/TableRow.interface";
 
 interface TbodyUsersProps {
   data: TableRow[];
+  columns: ColumnDef[];
   onRowClick?: (item: TableRow) => void;
   selectedItem?: TableRow | null;
 }
 
-const TbodyUsers = ({ data, onRowClick, selectedItem }: TbodyUsersProps) => {
+const TbodyUsers = ({ data, columns, onRowClick, selectedItem }: TbodyUsersProps) => {
   if (!Array.isArray(data)) {
     return (
       <tbody>
@@ -29,15 +30,11 @@ const TbodyUsers = ({ data, onRowClick, selectedItem }: TbodyUsersProps) => {
           }`}
           onClick={() => onRowClick?.(item)}
         >
-          <td className="px-6 py-2">{item.name}</td>
-          <td className="px-6 py-2">{item.email}</td>
-          <td className="px-6 py-2">{item.phone}</td>
-          <td className="px-6 py-2">{item.role}</td>
-          <td className="px-6 py-2">
-            {item.create_at
-              ? new Date(item.create_at).toLocaleDateString()
-              : "-"}
-          </td>
+          {columns.map((col, colIndex) => (
+            <td key={colIndex} className="px-6 py-2">
+              {col.render ? col.render(item) : String(item[col.field] ?? '')}
+            </td>
+          ))}
         </tr>
       ))}
     </tbody>

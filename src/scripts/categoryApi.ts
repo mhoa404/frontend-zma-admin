@@ -26,3 +26,19 @@ export const deleteCategory = async (id: string) => {
   if (!res.ok) throw new Error('Xoá danh mục thất bại')
   return res.json()
 }
+
+export const createCategory = async (category: { name: string }) => {
+  const token = localStorage.getItem('access_token');
+  const res = await fetch(`${BACKEND_API}/categories/create`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(category),
+  });
+
+  if (!res.ok) throw new Error('Tạo danh mục thất bại');
+  return res.json();
+};
+

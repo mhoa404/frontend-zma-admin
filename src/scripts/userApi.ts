@@ -1,6 +1,6 @@
-// src/services/userApi.ts
 import { BACKEND_API } from '../scripts/api'
 import type { TableRow } from '../interfaces/TableRow.interface'
+import axios from 'axios';
 
 export const fetchUsers = async (): Promise<TableRow[]> => {
   const token = localStorage.getItem('access_token')
@@ -32,4 +32,20 @@ export const deleteUser = async (id: string) => {
   if (!res.ok) throw new Error('Xoá user thất bại')
   return res.json()
 }
+
+export const createUser = async (data: {
+  name: string;
+  email: string;
+  password: string;
+  role?: string; // optional: mặc định BE đã là admin
+}) => {
+  const token = localStorage.getItem('access_token');
+  const res = await axios.post(`${BACKEND_API}/users/create`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+
 
