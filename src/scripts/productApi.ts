@@ -17,7 +17,6 @@ export interface UpdateProductPayload {
   category_id: string;
 }
 
-// Lấy danh sách sản phẩm
 export const fetchProducts = async (): Promise<UIProductRow[]> => {
   const token = localStorage.getItem('access_token');
 

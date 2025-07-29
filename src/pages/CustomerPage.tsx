@@ -126,7 +126,11 @@ const CustommerPage = () => {
   };
 
   const columns: ColumnDef[] = [
-    { header: 'Họ tên', field: 'name' },
+    {
+      header: 'Họ tên',
+      field: 'name',
+      render: (item) => item.name || item.zalo_id || '(Chưa đặt tên)',
+    },
     { header: 'Email', field: 'email' },
     { header: 'Số điện thoại', field: 'phone' },
     {

@@ -1,5 +1,6 @@
 export interface TableRow {
   _id: string | number;
+  zalo_id?: string;
   name?: string;
   email?: string;
   phone?: string;
