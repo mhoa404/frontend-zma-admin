@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
-import { FaGoogle, FaTwitter } from "react-icons/fa";
 import InputText from "../components/InputText";
 import { login } from "../scripts/authApi";
 import type { FormError } from "../interfaces/FormError.interface";
@@ -71,26 +70,6 @@ const LoginPage = () => {
             {isLoading ? <span>Đang xử lý...</span> : (<><span className="font-semibold">Sign In</span><ArrowRight className="h-4 w-4" /></>)}
           </button>
         </form>
-        <div className="mt-2 text-center text-sm text-white">
-          Don’t have an account?
-          <button onClick={() => navigate("/register")} className="text-blue-400 p-1 hover:border-none bg-transparent hover:underline focus:outline-none">
-            Sign up
-          </button>
-        </div>
-        <div className="relative my-6">
-          <hr className="border-gray-600" />
-          <span className="absolute top-[-10px] left-1/2 transform -translate-x-1/2 bg-slate-800 px-2 text-sm text-gray-400">
-            Or continue with
-          </span>
-        </div>
-        <div className="flex justify-center gap-4">
-          <button className="w-1/2 border bg-transparent border-gray-500 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-white/10">
-            <FaGoogle /> Google
-          </button>
-          <button className="w-1/2 border bg-transparent border-gray-500 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-white/10">
-            <FaTwitter /> Twitter
-          </button>
-        </div>
       </div>
     </div>
   );
