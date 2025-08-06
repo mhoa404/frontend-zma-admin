@@ -7,15 +7,22 @@ interface Props {
   onRowClick?: (item: TableRow) => void;
 }
 
+interface OrderItem {
+  product_id: string;
+  name: string;
+  quantity: number;
+  price: number;
+  img_url?: string;
+}
+
 const TbodyOrders = ({ data, columns, selectedItem, onRowClick }: Props) => {
   return (
     <tbody className="bg-white divide-y divide-gray-200">
       {data.map((item) => (
         <tr
           key={item._id}
-          className={`hover:bg-gray-50 cursor-pointer ${
-            selectedItem?._id === item._id ? "bg-blue-50" : ""
-          }`}
+          className={`hover:bg-gray-50 cursor-pointer ${selectedItem?._id === item._id ? "bg-blue-50" : ""
+            }`}
           onClick={() => onRowClick?.(item)}
         >
           {columns.map((col) => {
@@ -28,9 +35,19 @@ const TbodyOrders = ({ data, columns, selectedItem, onRowClick }: Props) => {
               >
                 {col.render
                   ? col.render(item)
-                  : value instanceof Date
-                  ? value.toLocaleString()
-                  : value ?? ""}
+                  : Array.isArray(value)
+                    ? (
+                      <ul className="list-disc list-inside space-y-1">
+                        {(value as OrderItem[]).map((v, idx) => (
+                          <li key={idx}>
+                            {v.name} x{v.quantity} - {v.price.toLocaleString()}đ
+                          </li>
+                        ))}
+                      </ul>
+                    )
+                    : value instanceof Date
+                      ? value.toLocaleString()
+                      : value ?? ""}
               </td>
             );
           })}
