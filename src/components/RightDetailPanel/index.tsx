@@ -3,14 +3,16 @@ import type { TableRow } from '../../interfaces/TableRow.interface';
 import UserDetailPanel from '../UserDetailPanel';
 import CategoryDetailPanel from '../CategoryDetailPanel';
 import ProductDetailPanel from '../ProductDetailPanel';
+import OrderDetailPanel from '../OrderDetailPanel';
 
 interface Props {
   selectedItem: TableRow | null;
   activeMenu: string;
   getStatusColor: (status: boolean) => string;
   onClose: () => void;
-  onDelete: (id: string) => void;
+  onDelete?: (id: string) => void;
   onEdit: (item: TableRow) => void;
+  onConfirm?: (item: TableRow) => void; // ✅ phương thức mới
 }
 
 export const RightDetailPanel: React.FC<Props> = ({
@@ -19,7 +21,8 @@ export const RightDetailPanel: React.FC<Props> = ({
   getStatusColor,
   onClose,
   onDelete,
-  onEdit, 
+  onEdit,
+  onConfirm, // ✅
 }) => {
   if (!selectedItem) return null;
 
@@ -30,7 +33,7 @@ export const RightDetailPanel: React.FC<Props> = ({
           selectedItem={selectedItem}
           onClose={onClose}
           onDelete={onDelete}
-          onEdit={onEdit} // ✅ truyền xuống
+          onEdit={onEdit}
         />
       );
 
@@ -41,7 +44,17 @@ export const RightDetailPanel: React.FC<Props> = ({
           getStatusColor={getStatusColor}
           onClose={onClose}
           onDelete={onDelete}
-          onEdit={onEdit} // ✅ truyền xuống
+          onEdit={onEdit}
+        />
+      );
+
+    case 'Orders':
+      return (
+        <OrderDetailPanel
+          selectedItem={selectedItem}
+          onClose={onClose}
+          onEdit={onEdit}
+          onConfirm={onConfirm} // ✅ truyền xuống
         />
       );
 
@@ -51,7 +64,7 @@ export const RightDetailPanel: React.FC<Props> = ({
           selectedItem={selectedItem}
           onClose={onClose}
           onDelete={onDelete}
-          onEdit={onEdit} // ✅ truyền xuống
+          onEdit={onEdit}
         />
       );
   }
