@@ -15,6 +15,8 @@ export interface UpdateProductPayload {
   sale_price?: number;
   description?: string;
   category_id: string;
+  img_url?: string;
+  img_public_id?: string;
 }
 
 export const fetchProducts = async (): Promise<UIProductRow[]> => {
@@ -41,7 +43,6 @@ export const fetchProducts = async (): Promise<UIProductRow[]> => {
   return mapped;
 };
 
-// Xoá sản phẩm
 export const deleteProduct = async (id: string) => {
   const token = localStorage.getItem('access_token');
 
@@ -60,6 +61,8 @@ export const createProduct = async (product: {
   sale_price?: number;
   description?: string;
   category_id: string;
+  img_url?: string;
+  img_public_id?: string;
 }) => {
   const token = localStorage.getItem('access_token');
 

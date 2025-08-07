@@ -9,10 +9,12 @@ interface FormModalProps<T extends Record<string, unknown>> {
   }[];
   onChange: (field: keyof T, value: string) => void;
   onSubmit: () => void;
+  onFileChange?: (file: File) => void;
   onClose?: () => void;
   mode?: 'add' | 'edit';
   title?: string;
   submitText?: string;
+  imagePreviewUrl?: string;
 }
 
 const FormModal = <T extends Record<string, unknown>>({
@@ -21,6 +23,8 @@ const FormModal = <T extends Record<string, unknown>>({
   onChange,
   onSubmit,
   onClose,
+  onFileChange,
+  imagePreviewUrl,
   mode = 'add',
   title,
   submitText,
@@ -38,31 +42,80 @@ const FormModal = <T extends Record<string, unknown>>({
         </div>
 
         <div className="p-6 space-y-4">
-          {fields.map(({ key, label, type = 'text', options, readOnly }) => (
-            <div key={String(key)}>
-              <label className="text-sm font-medium text-gray-900 mb-2 block">{label}</label>
-              {type === 'select' && options ? (
-                <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
-                  value={form[key] as string}
-                  onChange={(e) => onChange(key, e.target.value)}
-                >
-                  <option value="">Chọn {label.toLowerCase()}</option>
-                  {options.map((opt) => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  type={type}
-                  readOnly={readOnly} 
-                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm ${readOnly ? 'bg-gray-100 cursor-not-allowed' : ''}`}
-                  value={form[key] as string | number}
-                  onChange={(e) => onChange(key, e.target.value)}
+
+          {/* 🖼️ Upload ảnh */}
+          {onFileChange && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) onFileChange(file);
+                }}
+                className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              />
+              {imagePreviewUrl && (
+                <img
+                  src={imagePreviewUrl}
+                  alt="Preview"
+                  className="mt-3 w-full h-40 object-contain border rounded-md"
                 />
               )}
             </div>
-          ))}
+          )}
+
+          {/* 🔄 Render form fields */}
+          {fields.map(({ key, label, type = 'text', options, readOnly }) => {
+            const isPriceField = key === 'price' || key === 'sale_price';
+            if (isPriceField) return null;
+
+            return (
+              <div key={String(key)}>
+                <label className="text-sm font-medium text-gray-900 mb-2 block">{label}</label>
+                {type === 'select' && options ? (
+                  <select
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
+                    value={form[key] as string}
+                    onChange={(e) => onChange(key, e.target.value)}
+                  >
+                    <option value="">Chọn {label.toLowerCase()}</option>
+                    {options.map((opt) => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type={type}
+                    readOnly={readOnly}
+                    className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm ${
+                      readOnly ? 'bg-gray-100 cursor-not-allowed' : ''
+                    }`}
+                    value={form[key] as string | number}
+                    onChange={(e) => onChange(key, e.target.value)}
+                  />
+                )}
+              </div>
+            );
+          })}
+
+          {/* 🧮 price + sale_price cùng hàng */}
+          <div className="flex gap-4">
+            {['price', 'sale_price'].map((key) => (
+              <div className="flex-1" key={key}>
+                <label className="text-sm font-medium text-gray-900 mb-2 block">
+                  {key === 'price' ? 'Price' : 'Sale Price'}
+                </label>
+                <input
+                  type="number"
+                  value={form[key as keyof T] as string | number}
+                  onChange={(e) => onChange(key as keyof T, e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="flex justify-end p-6 border-t border-gray-200">
@@ -79,3 +132,4 @@ const FormModal = <T extends Record<string, unknown>>({
 };
 
 export default FormModal;
+

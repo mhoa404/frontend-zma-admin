@@ -34,11 +34,20 @@ const ProductDetailPanel = ({ onEdit, onDelete, selectedItem, onClose }: Props) 
       <div className="flex-1 p-6 overflow-y-auto">
         <div className="mb-6">
           <div className="flex items-center space-x-4">
-            <div className="h-10 w-10 rounded-md bg-yellow-400 flex items-center justify-center">
-              <span className="text-lg font-medium text-white">
-                {name.charAt(0) || '?'}
-              </span>
-            </div>
+            {selectedItem.img_url ? (
+              <img
+                src={selectedItem.img_url}
+                alt={name}
+                className="h-16 w-16 object-cover rounded-md border"
+              />
+            ) : (
+              <div className="h-16 w-16 rounded-md bg-yellow-400 flex items-center justify-center">
+                <span className="text-lg font-medium text-white">
+                  {name.charAt(0) || '?'}
+                </span>
+              </div>
+            )}
+
             <div>
               <h4 className="font-medium text-gray-900">{name}</h4>
               <p className="text-sm text-gray-500">{category_name || 'Danh mục không rõ'}</p>
