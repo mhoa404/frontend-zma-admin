@@ -8,7 +8,6 @@ import OrderPage from './pages/OrderPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RedirectIfAuth from './components/RedirectIfAuth.tsx';
-import RegisterPage from './pages/RegisPage';
 import RequireAuth from './components/RequireAuth';
 
 
@@ -17,7 +16,6 @@ const App = () => (
     <Routes>
       <Route element={<RedirectIfAuth />}>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
       </Route>
 
       <Route element={<RequireAuth />}>

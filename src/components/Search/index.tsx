@@ -1,4 +1,3 @@
-// src/components/Search/index.tsx
 import { Search as SearchIcon } from 'lucide-react';
 
 const Search = () => {

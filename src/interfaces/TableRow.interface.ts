@@ -21,6 +21,13 @@ export interface TableRow {
   total_reviews?: number;
   rating?: number;
   is_active?: boolean;
+  order_items?: {
+    product_id: string;
+    name: string;
+    quantity: number;
+    price: number;
+    img_url?: string;
+  }[]; 
 }
 
 export interface ColumnDef {

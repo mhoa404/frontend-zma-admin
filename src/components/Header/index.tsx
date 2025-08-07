@@ -1,4 +1,3 @@
-// src/components/Header/index.tsx
 interface HeaderProps {
   activeMenu: string;
 }

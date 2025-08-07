@@ -14,7 +14,7 @@ interface InputTextProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputText: React.FC<InputTextProps> = ({
+const InputText = ({
   iconLeft,
   placeholder,
   iconRight,
@@ -25,7 +25,7 @@ const InputText: React.FC<InputTextProps> = ({
   value,
   name,
   onChange,
-}) => {
+}: InputTextProps) => {
   return (
     <div className="relative w-full">
       {iconLeft && (
