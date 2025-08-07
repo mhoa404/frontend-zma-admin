@@ -2,7 +2,7 @@
 import axios from "axios";
 import { removeToken, getToken, saveToken } from "../utils/auth";
 
-export const BACKEND_API = "http://localhost:3000";
+export const BACKEND_API = "https://backend-zma.up.railway.app";
 
 const api = axios.create({
   baseURL: BACKEND_API,
