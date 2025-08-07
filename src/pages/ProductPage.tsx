@@ -14,6 +14,7 @@ import { fetchCategories } from '../scripts/categoryApi';
 import Search from '../components/Search';
 import FormModal from '../components/FormModal';
 import { parseAxiosError } from '../utils/parseAxiosError';
+import { uploadImageToCloudinary } from '../scripts/uploadApi';
 
 interface Category {
   _id: string;
@@ -27,6 +28,8 @@ const ProductPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('');
 
   const [form, setForm] = useState({
     name: '',
@@ -88,17 +91,30 @@ const ProductPage = () => {
     }
 
     try {
+      let img_url = '';
+      let img_public_id = '';
+
+      if (selectedFile) {
+        const uploaded = await uploadImageToCloudinary(selectedFile);
+        img_url = uploaded.url;
+        img_public_id = uploaded.public_id;
+      }
+
       await createProduct({
         name: form.name.trim(),
         price: Number(form.price),
         sale_price: form.sale_price ? Number(form.sale_price) : undefined,
         description: form.description?.trim() || undefined,
         category_id: form.category_id,
+        img_url,
+        img_public_id,
       });
 
       alert('✅ Đã tạo sản phẩm thành công');
       setShowModal(false);
       setForm({ name: '', price: '', sale_price: '', description: '', category_id: '' });
+      setSelectedFile(null);
+      setImagePreviewUrl('');
       await loadProducts();
     } catch (error) {
       console.error('Lỗi khi tạo sản phẩm:', error);
@@ -161,7 +177,16 @@ const ProductPage = () => {
   };
 
   const columns: ColumnDef[] = [
-    { header: 'Image', field: 'img_url' },
+    {
+      header: 'Image',
+      field: 'img_url',
+      render: (item) =>
+        item.img_url ? (
+          <img src={item.img_url} alt="img" className="w-10 h-10 object-contain" />
+        ) : (
+          <span className="text-gray-400 text-sm italic">No image</span>
+        ),
+    },
     { header: 'Name', field: 'name' },
     {
       header: 'Price',
@@ -250,7 +275,22 @@ const ProductPage = () => {
           ]}
           onChange={handleFormChange}
           onSubmit={handleCreateProducts}
-          onClose={() => setShowModal(false)}
+          onClose={() => {
+            setShowModal(false);
+            setSelectedFile(null);
+            setImagePreviewUrl('');
+          }}
+          onFileChange={(file) => {
+            setSelectedFile(file);
+            if (file) {
+              const reader = new FileReader();
+              reader.onloadend = () => setImagePreviewUrl(reader.result as string);
+              reader.readAsDataURL(file);
+            } else {
+              setImagePreviewUrl('');
+            }
+          }}
+          imagePreviewUrl={imagePreviewUrl}
         />
       )}
 

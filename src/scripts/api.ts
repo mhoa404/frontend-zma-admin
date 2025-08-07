@@ -2,14 +2,13 @@
 import axios from "axios";
 import { removeToken, getToken, saveToken } from "../utils/auth";
 
-export const BACKEND_API = "https://backend-zma.up.railway.app";
+export const BACKEND_API = "http://localhost:3000";
 
 const api = axios.create({
   baseURL: BACKEND_API,
-  withCredentials: true, // gửi cookie refresh_token
+  withCredentials: true,
 });
 
-// ✅ Request Interceptor: tự gắn access token
 api.interceptors.request.use((config) => {
   const token = getToken();
   if (token) {
@@ -18,7 +17,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// ✅ Response Interceptor: tự refresh khi 401
 api.interceptors.response.use(
   (res) => res,
   async (err) => {
