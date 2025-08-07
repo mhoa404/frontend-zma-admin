@@ -44,24 +44,29 @@ const FormModal = <T extends Record<string, unknown>>({
 
           {/* 🖼️ Upload ảnh */}
           {onFileChange && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) onFileChange(file);
-                }}
-                className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              />
+            <div className="flex items-start gap-4">
               {imagePreviewUrl && (
                 <img
                   src={imagePreviewUrl}
                   alt="Preview"
-                  className="mt-3 w-full h-40 object-contain border rounded-md"
+                  className="w-32 h-32 object-cover border rounded-md"
                 />
               )}
+
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Product Image
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) onFileChange(file);
+                  }}
+                  className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+              </div>
             </div>
           )}
 

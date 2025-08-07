@@ -13,6 +13,7 @@ export interface TableRow {
   category_name?: string;
   description?: string;
   img_url?: string;
+  img_public_id?: string;
   price?: number;
   sale_price?: number;
   available?: boolean;

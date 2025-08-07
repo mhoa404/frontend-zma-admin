@@ -21,6 +21,17 @@ interface Category {
   name: string;
 }
 
+interface ProductForm {
+  name: string;
+  price: string;
+  sale_price: string;
+  description: string;
+  category_id: string;
+  img_url?: string;
+  img_public_id?: string;
+  [key: string]: string | number | undefined;
+}
+
 const ProductPage = () => {
   const [products, setProducts] = useState<UIProductRow[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -31,7 +42,7 @@ const ProductPage = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState('');
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<ProductForm>({
     name: '',
     price: '',
     sale_price: '',
@@ -39,7 +50,13 @@ const ProductPage = () => {
     category_id: '',
   });
 
-  const [editForm, setEditForm] = useState<typeof form>(form);
+  const [editForm, setEditForm] = useState<ProductForm>({
+    name: '',
+    price: '',
+    sale_price: '',
+    description: '',
+    category_id: '',
+  });
 
   const loadProducts = async () => {
     try {
@@ -70,14 +87,14 @@ const ProductPage = () => {
     loadCategories();
   }, []);
 
-  const handleFormChange = (field: keyof typeof form, value: string) => {
+  const handleFormChange = (field: keyof ProductForm, value: string) => {
     setForm(prev => ({
       ...prev,
       [field]: field === 'price' || field === 'sale_price' ? Number(value) : value,
     }));
   };
 
-  const handleEditFormChange = (field: keyof typeof editForm, value: string) => {
+  const handleEditFormChange = (field: keyof ProductForm, value: string) => {
     setEditForm(prev => ({
       ...prev,
       [field]: field === 'price' || field === 'sale_price' ? Number(value) : value,
@@ -129,18 +146,47 @@ const ProductPage = () => {
     }
 
     try {
+      let img_url = editForm.img_url;
+      let img_public_id = editForm.img_public_id;
+
+      if (selectedFile) {
+        const uploaded = await uploadImageToCloudinary(selectedFile);
+        img_url = uploaded.url;
+        img_public_id = uploaded.public_id;
+      }
+
       await updateProduct(editingId, {
         name: editForm.name.trim(),
         price: Number(editForm.price),
         sale_price: editForm.sale_price ? Number(editForm.sale_price) : undefined,
         description: editForm.description?.trim() || undefined,
         category_id: editForm.category_id,
+        img_url,
+        img_public_id,
       });
 
       alert('✅ Cập nhật sản phẩm thành công');
+
+      // ✅ Load lại danh sách sản phẩm
+      await loadProducts();
+
+      // ✅ Cập nhật lại selectedItem để Right Panel hiển thị đúng ảnh mới
+      const updatedProduct = {
+        ...editForm,
+        _id: editingId,
+        img_url,
+        img_public_id,
+        price: Number(editForm.price),
+        sale_price: editForm.sale_price ? Number(editForm.sale_price) : undefined,
+        create_at: new Date().toISOString(), // Nếu bạn không có create_at từ backend
+      };
+      setSelectedItem(updatedProduct as UIProductRow);
+
+      // ✅ Reset lại form
       setShowEditModal(false);
       setEditingId(null);
-      await loadProducts();
+      setSelectedFile(null);
+      setImagePreviewUrl('');
     } catch (error) {
       console.error('❌ Cập nhật sản phẩm thất bại', error);
       alert(parseAxiosError(error));
@@ -170,8 +216,12 @@ const ProductPage = () => {
       sale_price: product.sale_price?.toString() || '',
       description: product.description || '',
       category_id: product.category_id || '',
+      img_url: product.img_url || '',
+      img_public_id: product.img_public_id || '',
     });
 
+    setImagePreviewUrl(product.img_url || '');
+    setSelectedFile(null);
     setEditingId(product._id ? String(product._id) : null);
     setShowEditModal(true);
   };
@@ -255,8 +305,9 @@ const ProductPage = () => {
         />
       </div>
 
+      {/* Modal Add */}
       {showModal && (
-        <FormModal<typeof form>
+        <FormModal<ProductForm>
           mode="add"
           title="Add Product"
           submitText="Create"
@@ -294,8 +345,9 @@ const ProductPage = () => {
         />
       )}
 
+      {/* Modal Edit */}
       {showEditModal && (
-        <FormModal<typeof editForm>
+        <FormModal<ProductForm>
           mode="edit"
           title="Edit Product"
           submitText="Save"
@@ -317,7 +369,20 @@ const ProductPage = () => {
           onClose={() => {
             setShowEditModal(false);
             setEditingId(null);
+            setSelectedFile(null);
+            setImagePreviewUrl('');
           }}
+          onFileChange={(file) => {
+            setSelectedFile(file);
+            if (file) {
+              const reader = new FileReader();
+              reader.onloadend = () => setImagePreviewUrl(reader.result as string);
+              reader.readAsDataURL(file);
+            } else {
+              setImagePreviewUrl('');
+            }
+          }}
+          imagePreviewUrl={imagePreviewUrl}
         />
       )}
     </div>
