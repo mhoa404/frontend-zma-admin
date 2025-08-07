@@ -1,4 +1,3 @@
-import React from 'react';
 import type { TableRow } from '../../interfaces/TableRow.interface';
 import UserDetailPanel from '../UserDetailPanel';
 import CategoryDetailPanel from '../CategoryDetailPanel';
@@ -12,10 +11,10 @@ interface Props {
   onClose: () => void;
   onDelete?: (id: string) => void;
   onEdit: (item: TableRow) => void;
-  onConfirm?: (item: TableRow) => void; // ✅ phương thức mới
+  onConfirm?: (item: TableRow) => void;
 }
 
-export const RightDetailPanel: React.FC<Props> = ({
+export const RightDetailPanel = ({
   selectedItem,
   activeMenu,
   getStatusColor,
@@ -23,7 +22,7 @@ export const RightDetailPanel: React.FC<Props> = ({
   onDelete,
   onEdit,
   onConfirm, // ✅
-}) => {
+}: Props) => {
   if (!selectedItem) return null;
 
   switch (activeMenu) {

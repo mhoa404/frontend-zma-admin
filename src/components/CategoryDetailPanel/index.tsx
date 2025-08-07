@@ -1,4 +1,3 @@
-import React from 'react'
 import { formatDate } from '../../utils/formatDate'
 import type { TableRow } from '../../interfaces/TableRow.interface'
 
@@ -10,7 +9,7 @@ interface Props {
   onEdit: (item: TableRow) => void
 }
 
-const CategoryDetailPanel: React.FC<Props> = ({onEdit, onDelete, selectedItem, onClose, getStatusColor }) => {
+const CategoryDetailPanel = ({onEdit, onDelete, selectedItem, onClose, getStatusColor }: Props) => {
   return (
     <div className="flex flex-col h-full">
       <div className="pl-3 h-20 border-b border-gray-200">

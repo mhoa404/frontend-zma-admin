@@ -5,7 +5,7 @@ interface FormModalProps<T extends Record<string, unknown>> {
     label: string;
     type?: 'text' | 'number' | 'password' | 'select';
     options?: { value: string; label: string }[];
-    readOnly?: boolean; // ✅ thêm hỗ trợ readOnly cho từng field
+    readOnly?: boolean; 
   }[];
   onChange: (field: keyof T, value: string) => void;
   onSubmit: () => void;
@@ -25,6 +25,7 @@ const FormModal = <T extends Record<string, unknown>>({
   title,
   submitText,
 }: FormModalProps<T>) => {
+  
   const defaultTitle = mode === 'edit' ? 'Chỉnh sửa' : 'Thêm mới';
   const defaultButton = mode === 'edit' ? 'Lưu thay đổi' : 'Xác nhận';
 

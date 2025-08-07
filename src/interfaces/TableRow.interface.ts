@@ -26,7 +26,7 @@ export interface TableRow {
     quantity: number;
     price: number;
     img_url?: string;
-  }[]; // ✅ thêm dòng này
+  }[]; 
 }
 
 export interface ColumnDef {

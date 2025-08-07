@@ -1,4 +1,3 @@
-import React from 'react'
 import { formatCurrency } from '../../utils/formatCurrency'
 import { formatDate } from '../../utils/formatDate'
 import type { TableRow } from '../../interfaces/TableRow.interface'
@@ -10,7 +9,7 @@ interface Props {
   onEdit: (item: TableRow) => void
 }
 
-const ProductDetailPanel: React.FC<Props> = ({ onEdit, onDelete, selectedItem, onClose }) => {
+const ProductDetailPanel = ({ onEdit, onDelete, selectedItem, onClose }: Props) => {
   const {
     name = '',
     description = '',
