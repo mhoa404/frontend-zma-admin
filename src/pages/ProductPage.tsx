@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useProductHandlers } from '../hooks/useProductHandlers';
 import TableComponent from '../components/Table';
 import TbodyProducts from '../components/Table/TBodyProduct';
@@ -5,6 +6,7 @@ import { getStatusColor } from '../utils/statusColor';
 import { RightDetailPanel } from '../components/RightDetailPanel';
 import Search from '../components/Search';
 import FormModal from '../components/FormModal';
+import ImagePickerModal from '../components/ImagePickerModal';
 import type { ColumnDef, UIProductRow } from '../interfaces/TableRow.interface';
 
 const ProductPage = () => {
@@ -31,6 +33,7 @@ const ProductPage = () => {
     resetUpload,
     resetEditForm,
   } = useProductHandlers();
+  const [showImagePicker, setShowImagePicker] = useState(false);
 
   const columns: ColumnDef[] = [
     {
@@ -85,8 +88,9 @@ const ProductPage = () => {
 
       {/* Table */}
       <main
-        className={`p-6 transition-all duration-300 ease-in-out ${selectedItem ? 'w-[calc(100%-320px)]' : 'w-full'
-          }`}
+        className={`p-6 transition-all duration-300 ease-in-out ${
+          selectedItem ? 'w-[calc(100%-320px)]' : 'w-full'
+        }`}
       >
         <TableComponent
           columns={columns}
@@ -98,8 +102,9 @@ const ProductPage = () => {
       </main>
 
       <div
-        className={`w-80 h-full bg-white border-l border-gray-200 fixed right-0 top-0 z-50 transform transition-transform duration-300 ${selectedItem ? 'translate-x-0' : 'translate-x-full'
-          }`}
+        className={`w-80 h-full bg-white border-l border-gray-200 fixed right-0 top-0 z-50 transform transition-transform duration-300 ${
+          selectedItem ? 'translate-x-0' : 'translate-x-full'
+        }`}
       >
         <RightDetailPanel
           selectedItem={selectedItem}
@@ -144,6 +149,7 @@ const ProductPage = () => {
             resetUpload();
           }}
           onFileChange={handleFileChange}
+          onOpenImagePicker={() => setShowImagePicker(true)}
           imagePreviewUrl={imagePreviewUrl}
         />
       )}
@@ -175,7 +181,21 @@ const ProductPage = () => {
             resetUpload();
           }}
           onFileChange={handleFileChange}
+          onOpenImagePicker={() => setShowImagePicker(true)}
           imagePreviewUrl={imagePreviewUrl}
+        />
+      )}
+
+      {/* Modal Image Picker */}
+      {showImagePicker && (
+        <ImagePickerModal
+          onClose={() => setShowImagePicker(false)}
+          onSelect={(image) => {
+            if (image?.file) {
+              handleFileChange(image.file);
+            }
+            setShowImagePicker(false);
+          }}
         />
       )}
     </div>

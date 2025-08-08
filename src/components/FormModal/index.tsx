@@ -10,6 +10,7 @@ interface FormModalProps<T extends Record<string, unknown>> {
   onChange: (field: keyof T, value: string) => void;
   onSubmit: () => void;
   onFileChange?: (file: File) => void;
+  onOpenImagePicker?: () => void; // ✅ mới thêm
   onClose?: () => void;
   mode?: 'add' | 'edit';
   title?: string;
@@ -24,26 +25,27 @@ const FormModal = <T extends Record<string, unknown>>({
   onSubmit,
   onClose,
   onFileChange,
+  onOpenImagePicker,
   imagePreviewUrl,
   mode = 'add',
   title,
   submitText,
 }: FormModalProps<T>) => {
-
   const defaultTitle = mode === 'edit' ? 'Chỉnh sửa' : 'Thêm mới';
   const defaultButton = mode === 'edit' ? 'Lưu thay đổi' : 'Xác nhận';
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+        {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">{title || defaultTitle}</h2>
           <button className="text-gray-400 hover:text-gray-600" onClick={onClose}>×</button>
         </div>
 
+        {/* Body */}
         <div className="p-6 space-y-4">
-
-          {/* 🖼️ Upload ảnh */}
+          {/* Ảnh + upload */}
           {onFileChange && (
             <div className="flex items-start gap-4">
               {imagePreviewUrl && (
@@ -67,11 +69,21 @@ const FormModal = <T extends Record<string, unknown>>({
                   }}
                   className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                 />
+
+                {onOpenImagePicker && (
+                  <button
+                    type="button"
+                    onClick={onOpenImagePicker}
+                    className="mt-2 text-blue-600 text-sm underline hover:text-blue-800"
+                  >
+                    Chọn ảnh từ thư viện
+                  </button>
+                )}
               </div>
             </div>
           )}
 
-          {/* 🔄 Render form fields */}
+          {/* Các field khác */}
           {fields.map(({ key, label, type = 'text', options, readOnly }) => {
             const isPriceField = key === 'price' || key === 'sale_price';
             if (isPriceField) return null;
@@ -94,8 +106,7 @@ const FormModal = <T extends Record<string, unknown>>({
                   <input
                     type={type}
                     readOnly={readOnly}
-                    className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm ${readOnly ? 'bg-gray-100 cursor-not-allowed' : ''
-                      }`}
+                    className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm ${readOnly ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                     value={form[key] as string | number}
                     onChange={(e) => onChange(key, e.target.value)}
                   />
@@ -104,6 +115,7 @@ const FormModal = <T extends Record<string, unknown>>({
             );
           })}
 
+          {/* price + sale_price */}
           {('price' in form && 'sale_price' in form) && (
             <div className="flex gap-4">
               {(['price', 'sale_price'] as (keyof T)[]).map((key) => (
@@ -121,9 +133,9 @@ const FormModal = <T extends Record<string, unknown>>({
               ))}
             </div>
           )}
-
         </div>
 
+        {/* Footer */}
         <div className="flex justify-end p-6 border-t border-gray-200">
           <button
             className="bg-gray-900 text-white px-6 py-2 rounded-md hover:bg-gray-800 text-sm"
@@ -138,4 +150,3 @@ const FormModal = <T extends Record<string, unknown>>({
 };
 
 export default FormModal;
-
