@@ -1,3 +1,5 @@
+import type { OrderItem } from "./OrderItem.interface";
+
 export interface TableRow {
   _id: string | number;
   zalo_id?: string;
@@ -21,13 +23,7 @@ export interface TableRow {
   total_reviews?: number;
   rating?: number;
   is_active?: boolean;
-  order_items?: {
-    product_id: string;
-    name: string;
-    quantity: number;
-    price: number;
-    img_url?: string;
-  }[]; 
+  order_items?: OrderItem[]; 
 }
 
 export interface ColumnDef {

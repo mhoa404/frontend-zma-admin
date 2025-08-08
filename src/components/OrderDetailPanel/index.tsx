@@ -13,7 +13,11 @@ const OrderDetailPanel = ({
   onClose,
   onConfirm
 }: Props) => {
-  const { orderId, name, value, status, date, order_items } = selectedItem;
+  const { orderId, name, value, status = '', date, order_items } = selectedItem;
+
+  const lowerStatus = status.toLowerCase();
+  const isConfirmed = lowerStatus === 'confirmed';
+  const isCompleted = lowerStatus === 'completed';
 
   const handleCancel = async () => {
     const confirmed = window.confirm('Bạn có chắc muốn huỷ đơn hàng này?');
@@ -84,19 +88,25 @@ const OrderDetailPanel = ({
       <div className="p-6 mt-auto border-t border-gray-200 space-y-2">
         {onConfirm && (
           <button
+            disabled={isCompleted}
             onClick={() => onConfirm(selectedItem)}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md"
+            className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${isCompleted
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-blue-600 hover:bg-blue-700 text-white'
+              }`}
           >
-            Xác nhận đơn hàng
+            {isConfirmed ? 'Đang giao hàng' : 'Xác nhận đơn hàng'}
           </button>
         )}
 
-        <button
-          onClick={handleCancel}
-          className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md"
-        >
-          Huỷ đơn hàng
-        </button>
+        {!isConfirmed && (
+          <button
+            onClick={handleCancel}
+            className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md"
+          >
+            Huỷ đơn hàng
+          </button>
+        )}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ interface FormModalProps<T extends Record<string, unknown>> {
     label: string;
     type?: 'text' | 'number' | 'password' | 'select';
     options?: { value: string; label: string }[];
-    readOnly?: boolean; 
+    readOnly?: boolean;
   }[];
   onChange: (field: keyof T, value: string) => void;
   onSubmit: () => void;
@@ -29,7 +29,7 @@ const FormModal = <T extends Record<string, unknown>>({
   title,
   submitText,
 }: FormModalProps<T>) => {
-  
+
   const defaultTitle = mode === 'edit' ? 'Chỉnh sửa' : 'Thêm mới';
   const defaultButton = mode === 'edit' ? 'Lưu thay đổi' : 'Xác nhận';
 
@@ -94,9 +94,8 @@ const FormModal = <T extends Record<string, unknown>>({
                   <input
                     type={type}
                     readOnly={readOnly}
-                    className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm ${
-                      readOnly ? 'bg-gray-100 cursor-not-allowed' : ''
-                    }`}
+                    className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm ${readOnly ? 'bg-gray-100 cursor-not-allowed' : ''
+                      }`}
                     value={form[key] as string | number}
                     onChange={(e) => onChange(key, e.target.value)}
                   />
@@ -105,22 +104,24 @@ const FormModal = <T extends Record<string, unknown>>({
             );
           })}
 
-          {/* 🧮 price + sale_price cùng hàng */}
-          <div className="flex gap-4">
-            {['price', 'sale_price'].map((key) => (
-              <div className="flex-1" key={key}>
-                <label className="text-sm font-medium text-gray-900 mb-2 block">
-                  {key === 'price' ? 'Price' : 'Sale Price'}
-                </label>
-                <input
-                  type="number"
-                  value={form[key as keyof T] as string | number}
-                  onChange={(e) => onChange(key as keyof T, e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
-                />
-              </div>
-            ))}
-          </div>
+          {('price' in form && 'sale_price' in form) && (
+            <div className="flex gap-4">
+              {(['price', 'sale_price'] as (keyof T)[]).map((key) => (
+                <div className="flex-1" key={String(key)}>
+                  <label className="text-sm font-medium text-gray-900 mb-2 block">
+                    {key === 'price' ? 'Price' : 'Sale Price'}
+                  </label>
+                  <input
+                    type="number"
+                    value={form[key] as string | number}
+                    onChange={(e) => onChange(key, e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
         </div>
 
         <div className="flex justify-end p-6 border-t border-gray-200">
