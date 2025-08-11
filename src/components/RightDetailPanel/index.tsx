@@ -1,8 +1,8 @@
 import type { TableRow } from '../../interfaces/TableRow.interface';
-import UserDetailPanel from '../UserDetailPanel';
-import CategoryDetailPanel from '../CategoryDetailPanel';
-import ProductDetailPanel from '../ProductDetailPanel';
-import OrderDetailPanel from '../OrderDetailPanel';
+import UserDetailPanel from './UserDetailPanel';
+import CategoryDetailPanel from './CategoryDetailPanel';
+import ProductDetailPanel from './ProductDetailPanel';
+import OrderDetailPanel from './OrderDetailPanel';
 
 interface Props {
   selectedItem: TableRow | null;

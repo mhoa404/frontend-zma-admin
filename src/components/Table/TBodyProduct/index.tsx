@@ -19,17 +19,17 @@ const TbodyProducts = ({ data, onRowClick, selectedItem }: TbodyProductsProps) =
           }`}
           onClick={() => onRowClick?.(item)}
         >
-          <td className="px-6 py-2">
+          <td className="px-6 py-2 w-32">
             <img
-              src={item.img_url || "https://via.placeholder.com/40"}
-              alt="img"
-              className="w-12 h-12 object-cover rounded"
+              src={item.img_url}
+              alt="Lỗi tải ảnh"
+              className="w-16 h-16 object-cover rounded"
             />
           </td>
           <td className="px-6 py-2">{item.name}</td>
           <td className="px-6 py-2">{item.price?.toLocaleString()} VNĐ</td>
           <td className="px-6 py-2">{item.category_name}</td>
-          <td className="px-6 py-2">{new Date(item.create_at!).toLocaleDateString()}</td>
+          {/* <td className="px-6 py-2">{new Date(item.create_at!).toLocaleDateString()}</td> */}
           <td className="px-6 py-2">
             <span
               className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(

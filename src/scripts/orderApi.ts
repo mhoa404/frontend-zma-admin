@@ -1,7 +1,7 @@
 import api from "./api";
 
 export const fetchAllOrders = async () => {
-  const res = await api.get("/orders/all");
+  const res = await api.get("/orders");
   return res.data;
 };
 

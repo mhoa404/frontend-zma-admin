@@ -10,7 +10,7 @@ interface FormModalProps<T extends Record<string, unknown>> {
   onChange: (field: keyof T, value: string) => void;
   onSubmit: () => void;
   onFileChange?: (file: File) => void;
-  onOpenImagePicker?: () => void; // ✅ mới thêm
+  onOpenImagePicker?: () => void;
   onClose?: () => void;
   mode?: 'add' | 'edit';
   title?: string;

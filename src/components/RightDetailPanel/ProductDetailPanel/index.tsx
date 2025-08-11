@@ -1,6 +1,6 @@
-import { formatCurrency } from '../../utils/formatCurrency'
-import { formatDate } from '../../utils/formatDate'
-import type { TableRow } from '../../interfaces/TableRow.interface'
+import { formatCurrency } from '../../../utils/formatCurrency'
+import { formatDate } from '../../../utils/formatDate'
+import type { TableRow } from '../../../interfaces/TableRow.interface'
 
 interface Props {
   selectedItem: TableRow

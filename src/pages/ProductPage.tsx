@@ -46,20 +46,20 @@ const ProductPage = () => {
           <span className="text-gray-400 text-sm italic">No image</span>
         ),
     },
-    { header: 'Name', field: 'name' },
+    { header: 'Tên sản phẩm', field: 'name' },
     {
-      header: 'Price',
+      header: 'Giá',
       field: 'price',
       render: (item) => `${item.price?.toLocaleString()} VNĐ`,
     },
-    { header: 'Category', field: 'category_name' },
+    { header: 'Danh mục', field: 'category_name' },
+    // {
+    //   header: 'Ngày tạo',
+    //   field: 'create_at',
+    //   render: (item) => new Date(item.create_at!).toLocaleDateString(),
+    // },
     {
-      header: 'Created At',
-      field: 'create_at',
-      render: (item) => new Date(item.create_at!).toLocaleDateString(),
-    },
-    {
-      header: 'Available',
+      header: 'Hoạt động',
       field: 'available',
       render: (item) => (
         <span

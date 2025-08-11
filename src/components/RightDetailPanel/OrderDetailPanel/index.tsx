@@ -1,5 +1,5 @@
-import type { TableRow } from '../../interfaces/TableRow.interface';
-import { cancelOrder } from '../../scripts/orderApi';
+import type { TableRow } from '../../../interfaces/TableRow.interface';
+import { cancelOrder } from '../../../scripts/orderApi';
 
 interface Props {
   selectedItem: TableRow;
