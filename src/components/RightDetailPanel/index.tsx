@@ -15,32 +15,34 @@ type CommonHandlers = {
 type RightDetailPanelProps =
   | ({
       activeMenu: 'Users'
-      selectedItem: UserRow
+      selectedItem: UserRow | null // ✅ cho phép null
       onDelete?: (id: string) => void
       onEdit: (item: UserRow) => void
     } & CommonHandlers)
   | ({
       activeMenu: 'Categories'
-      selectedItem: CategoryRow
+      selectedItem: CategoryRow | null // ✅ cho phép null
       getStatusColor: (status: boolean) => string
       onDelete?: (id: string) => void
       onEdit: (item: CategoryRow) => void
     } & CommonHandlers)
   | ({
       activeMenu: 'Orders'
-      selectedItem: OrderRow
+      selectedItem: OrderRow | null // ✅ cho phép null
       onEdit: (item: OrderRow) => void
       onConfirm?: (item: OrderRow) => void
+      getStatusColor?: (status: boolean) => string
     } & CommonHandlers)
   | ({
       activeMenu: 'Products'
-      selectedItem: ProductRow
+      selectedItem: ProductRow | null // ✅ cho phép null
       onDelete?: (id: string) => void
       onEdit: (item: ProductRow) => void
     } & CommonHandlers)
 
 export const RightDetailPanel = (props: RightDetailPanelProps) => {
-  // TS sẽ tự narrow theo props.activeMenu
+  if (!props.selectedItem) return null // ✅ tránh render khi chưa chọn
+
   switch (props.activeMenu) {
     case 'Users':
       return (

@@ -1,7 +1,7 @@
 import { useOrderListStore } from '../store/Order/orderListStore';
 import { fetchAllOrders, updateOrderStatus } from '../scripts/orderApi';
 import type { OrderItem } from '../interfaces/OrderItem.interface';
-import type { UIOrderRow } from '../interfaces/UIOrderRow.interface';
+import type { OrderRow } from '../interfaces/Table/OrderRow.interface';
 import type { OrderStatus } from '../types/order';
 
 interface OrderResponse {
@@ -30,7 +30,7 @@ export const useOrderHandlers = () => {
       setLoading(true);
       const data: OrderResponse[] = await fetchAllOrders();
 
-      const mapped: UIOrderRow[] = data.map((order) => ({
+      const mapped: OrderRow[] = data.map((order) => ({
         _id: order._id,
         orderId: order._id,
         payment_method: order.payment_method?.toUpperCase() || 'UNKNOWN',
@@ -38,7 +38,6 @@ export const useOrderHandlers = () => {
         value: `${order.total_price.toLocaleString()}₫`,
         date: order.created_at,
         order_items: order.order_items,
-        // UI fields lấy từ snapshot
         customer_name: order.address_snapshot?.full_name || '',
         phone: order.address_snapshot?.phone || '',
         full_address: [
@@ -59,7 +58,7 @@ export const useOrderHandlers = () => {
     }
   };
 
-  const handleConfirm = async (item: UIOrderRow) => {
+  const handleConfirm = async (item: OrderRow) => {
     const confirmed = window.confirm('Bạn có chắc muốn xác nhận đơn hàng này?');
     if (!confirmed) return;
 
@@ -74,7 +73,7 @@ export const useOrderHandlers = () => {
     }
   };
 
-  const handleEdit = (item: UIOrderRow) => {
+  const handleEdit = (item: OrderRow) => {
     alert(`Mở modal cập nhật đơn hàng: ${item.orderId}`);
   };
 

@@ -5,7 +5,7 @@ import TbodyOrders from '../components/Table/TbodyOrders';
 import { formatDate } from '../utils/formatDate';
 import { RightDetailPanel } from '../components/RightDetailPanel';
 import type { ColumnDef } from '../interfaces/ColumnDef.interface';
-import type { UIOrderRow } from '../interfaces/UIOrderRow.interface';
+import type { OrderRow } from '../interfaces/Table/OrderRow.interface';
 
 const OrderPage = () => {
   const {
@@ -21,7 +21,7 @@ const OrderPage = () => {
     loadOrders();
   }, [loadOrders]);
 
-  const columns: ColumnDef<UIOrderRow>[] = [
+  const columns: ColumnDef<OrderRow>[] = [
     {
       header: 'Tên người đặt',
       field: 'customer_name',

@@ -1,11 +1,11 @@
-import type { UIOrderRow } from "../../../interfaces/UIOrderRow.interface";
+import type { OrderRow } from "../../../interfaces/Table/OrderRow.interface";
 import type { ColumnDef } from "../../../interfaces/ColumnDef.interface";
 
 interface Props {
-  data: UIOrderRow[];
-  columns: ColumnDef<UIOrderRow>[];
-  selectedItem?: UIOrderRow | null;
-  onRowClick?: (item: UIOrderRow) => void;
+  data: OrderRow[];
+  columns: ColumnDef<OrderRow>[];
+  selectedItem?: OrderRow | null;
+  onRowClick?: (item: OrderRow) => void;
 }
 
 interface OrderItem {
@@ -30,7 +30,7 @@ const TbodyOrders = ({ data, columns, selectedItem, onRowClick }: Props) => {
 
           {/* Các cột còn lại */}
           {columns.map((col) => {
-            const value = item[col.field as keyof UIOrderRow] as unknown;
+            const value = item[col.field as keyof OrderRow] as unknown;
             return (
               <td
                 key={String(col.field)}
