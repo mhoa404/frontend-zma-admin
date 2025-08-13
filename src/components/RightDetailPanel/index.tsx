@@ -18,6 +18,7 @@ type RightDetailPanelProps =
       selectedItem: UserRow | null // ✅ cho phép null
       onDelete?: (id: string) => void
       onEdit: (item: UserRow) => void
+      getStatusColor?: (status: boolean) => string
     } & CommonHandlers)
   | ({
       activeMenu: 'Categories'
@@ -38,6 +39,7 @@ type RightDetailPanelProps =
       selectedItem: ProductRow | null // ✅ cho phép null
       onDelete?: (id: string) => void
       onEdit: (item: ProductRow) => void
+      getStatusColor?: (status: boolean) => string
     } & CommonHandlers)
 
 export const RightDetailPanel = (props: RightDetailPanelProps) => {
