@@ -7,7 +7,9 @@ import { RightDetailPanel } from '../components/RightDetailPanel';
 import Search from '../components/Search';
 import FormModal from '../components/FormModal';
 import ImagePickerModal from '../components/ImagePickerModal';
-import type { ColumnDef, UIProductRow } from '../interfaces/TableRow.interface';
+import type { ColumnDef } from '../interfaces/ColumnDef.interface';
+import type { UIProductRow } from '../interfaces/UIProductRow.interface';
+import type { ProductRow } from '../interfaces/Table/ProductRow.interface';
 
 const ProductPage = () => {
   const {
@@ -35,7 +37,7 @@ const ProductPage = () => {
   } = useProductHandlers();
   const [showImagePicker, setShowImagePicker] = useState(false);
 
-  const columns: ColumnDef[] = [
+  const columns: ColumnDef<ProductRow>[] = [
     {
       header: 'Image',
       field: 'img_url',

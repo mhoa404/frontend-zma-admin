@@ -1,11 +1,11 @@
 // src/components/TbodyCategories.tsx
-import type { TableRow } from "../../../interfaces/TableRow.interface";
 import { getStatusColor } from "../../../utils/statusColor";
+import type { CategoryRow } from "../../../interfaces/Table/CategoryRow.interface";
 
 interface TbodyCategoriesProps {
-  data: TableRow[];
-  onRowClick?: (item: TableRow) => void;
-  selectedItem?: TableRow | null;
+  data: CategoryRow[];
+  onRowClick?: (item: CategoryRow) => void;
+  selectedItem?: CategoryRow | null;
 }
 
 const TbodyCategories = ({ data, onRowClick, selectedItem }: TbodyCategoriesProps) => {

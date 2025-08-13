@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { getStatusColor } from '../utils/statusColor';
-import type { ColumnDef } from '../interfaces/TableRow.interface';
+import type { ColumnDef } from '../interfaces/ColumnDef.interface';
+import type { CategoryRow } from '../interfaces/Table/CategoryRow.interface';
 
 import TableComponent from '../components/Table';
 import TbodyCategories from '../components/Table/TBodyCategory';
@@ -38,7 +39,7 @@ const CategoryPage = () => {
     setEditForm({ ...editForm, [field]: value });
   };
 
-  const columns: ColumnDef[] = [
+  const columns: ColumnDef<CategoryRow>[] = [
     { header: 'Name', field: 'name' },
     {
       header: 'Created At',

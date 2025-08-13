@@ -1,12 +1,12 @@
 import { formatDate } from '../../../utils/formatDate'
-import type { TableRow } from '../../../interfaces/TableRow.interface'
+import type { CategoryRow } from '../../../interfaces/Table/CategoryRow.interface'
 
 interface Props {
-  selectedItem: TableRow
+  selectedItem: CategoryRow
   onClose: () => void
   getStatusColor: (status: boolean) => string
   onDelete?: (id: string) => void
-  onEdit: (item: TableRow) => void
+  onEdit: (item: CategoryRow) => void
 }
 
 const CategoryDetailPanel = ({onEdit, onDelete, selectedItem, onClose, getStatusColor }: Props) => {

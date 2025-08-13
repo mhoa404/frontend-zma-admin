@@ -1,5 +1,5 @@
 // src/components/TbodyProducts.tsx
-import type { UIProductRow } from "../../../interfaces/TableRow.interface";
+import type { UIProductRow } from "../../../interfaces/UIProductRow.interface";
 import { getStatusColor } from "../../../utils/statusColor";
 
 interface TbodyProductsProps {

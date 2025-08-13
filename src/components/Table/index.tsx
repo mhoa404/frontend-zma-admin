@@ -1,12 +1,12 @@
 // src/components/TableComponent.tsx
-import type { ColumnDef, TableRow } from "../../interfaces/TableRow.interface";
+import type { ColumnDef } from "../../interfaces/ColumnDef.interface";
 import Thead from "./Thead";
 
-interface TableComponentProps<T extends TableRow> {
-  columns: ColumnDef[];
+interface TableComponentProps<T> {
+  columns: ColumnDef<T>[];
   BodyComponent: React.ComponentType<{
     data: T[];
-    columns: ColumnDef[];
+    columns: ColumnDef<T>[];
     onRowClick?: (item: T) => void;
     selectedItem?: T | null;
   }>;
@@ -15,7 +15,7 @@ interface TableComponentProps<T extends TableRow> {
   onRowClick?: (item: T) => void;
 }
 
-const TableComponent = <T extends TableRow>({
+const TableComponent = <T,>({
   columns,
   BodyComponent,
   data,
@@ -28,7 +28,7 @@ const TableComponent = <T extends TableRow>({
         <Thead columns={columns} />
         <BodyComponent
           data={data}
-          columns={columns} // 👈 thêm dòng này!
+          columns={columns} 
           selectedItem={selectedItem}
           onRowClick={onRowClick}
         />

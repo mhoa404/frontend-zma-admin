@@ -3,7 +3,7 @@ import { useCustomerFormStore } from '../store/Customer/customerFormStore';
 import { useCustomerListStore } from '../store/Customer/customerListStore';
 import { useCustomerModalStore } from '../store/Customer/customerModalStore';
 import { createUser, deleteUser, fetchUsers, updateUser } from '../scripts/userApi';
-import type { TableRow } from '../interfaces/TableRow.interface';
+import type { UserRow } from '../interfaces/Table/UserRow.interface';
 
 export const useCustomerHandlers = () => {
   const { form, editForm, editingId, setForm, setEditForm, setEditingId } = useCustomerFormStore();
@@ -55,7 +55,7 @@ export const useCustomerHandlers = () => {
     await fetchAllUsers();
   };
 
-  const handleStartEdit = (item: TableRow) => {
+  const handleStartEdit = (item: UserRow) => {
     setEditForm({
       name: item.name || '',
       email: item.email || '',

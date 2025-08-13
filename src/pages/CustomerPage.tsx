@@ -5,12 +5,13 @@ import TableComponent from '../components/Table';
 import TbodyUsers from '../components/Table/TbodyUsers';
 import { RightDetailPanel } from '../components/RightDetailPanel';
 import { formatDate } from '../utils/formatDate';
-import type { ColumnDef } from '../interfaces/TableRow.interface';
+import type { ColumnDef } from '../interfaces/ColumnDef.interface';
 import FormModal from '../components/FormModal';
 import Search from '../components/Search';
 
 import { useCustomerModalStore } from '../store/Customer/customerModalStore';
 import { useCustomerListStore } from '../store/Customer/customerListStore';
+import type { UserRow } from '../interfaces/Table/UserRow.interface';
 
 const CustommerPage = () => {
   const {
@@ -34,7 +35,7 @@ const CustommerPage = () => {
     fetchAllUsers();
   }, [fetchAllUsers]);
 
-  const columns: ColumnDef[] = [
+  const columns: ColumnDef<UserRow>[] = [
     {
       header: 'Họ tên',
       field: 'name',

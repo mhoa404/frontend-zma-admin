@@ -1,11 +1,11 @@
 // src/components/Thead.tsx
-import type { ColumnDef } from "../../../interfaces/TableRow.interface";
+import type { ColumnDef } from "../../../interfaces/ColumnDef.interface";
 
-interface TheadProps {
-  columns: ColumnDef[];
+interface TheadProps<T> {
+  columns: ColumnDef<T>[];
 }
 
-const Thead = ({ columns }: TheadProps) => {
+const Thead = <T,>({ columns }: TheadProps<T>) => {
   return (
     <thead className="bg-slate-500">
       <tr>

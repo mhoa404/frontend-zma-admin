@@ -1,10 +1,11 @@
-import type { ColumnDef, TableRow } from "../../../interfaces/TableRow.interface";
+import type { UserRow } from "../../../interfaces/Table/UserRow.interface";
+import type { ColumnDef } from "../../../interfaces/ColumnDef.interface";
 
 interface TbodyUsersProps {
-  data: TableRow[];
-  columns: ColumnDef[];
-  onRowClick?: (item: TableRow) => void;
-  selectedItem?: TableRow | null;
+  data: UserRow[];
+  columns: ColumnDef<UserRow>[];
+  onRowClick?: (item: UserRow) => void;
+  selectedItem?: UserRow | null;
 }
 
 const TbodyUsers = ({ data, columns, onRowClick, selectedItem }: TbodyUsersProps) => {

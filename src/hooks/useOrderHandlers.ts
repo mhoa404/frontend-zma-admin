@@ -1,7 +1,8 @@
 import { useOrderListStore } from '../store/Order/orderListStore';
 import { fetchAllOrders, updateOrderStatus } from '../scripts/orderApi';
 import type { OrderItem } from '../interfaces/OrderItem.interface';
-import type { TableRow } from '../interfaces/TableRow.interface';
+import type { UIOrderRow } from '../interfaces/UIOrderRow.interface';
+import type { OrderStatus } from '../types/order';
 
 interface OrderResponse {
   _id: string;
@@ -10,24 +11,44 @@ interface OrderResponse {
   total_price: number;
   created_at: string;
   order_items: OrderItem[];
+  address_snapshot?: {
+    full_name?: string;
+    phone?: string;
+    street?: string;
+    ward?: string;
+    district?: string;
+    province?: string;
+  };
 }
 
 export const useOrderHandlers = () => {
-  const { orders, selectedItem, setOrders, setSelectedItem, setLoading } = useOrderListStore();
+  const { orders, selectedItem, setOrders, setSelectedItem, setLoading } =
+    useOrderListStore();
 
   const loadOrders = async () => {
     try {
       setLoading(true);
       const data: OrderResponse[] = await fetchAllOrders();
 
-      const mapped: TableRow[] = data.map((order) => ({
+      const mapped: UIOrderRow[] = data.map((order) => ({
         _id: order._id,
         orderId: order._id,
-        name: order.payment_method?.toUpperCase() || 'UNKNOWN',
-        status: order.status,
+        payment_method: order.payment_method?.toUpperCase() || 'UNKNOWN',
+        status: order.status as OrderStatus,
         value: `${order.total_price.toLocaleString()}₫`,
         date: order.created_at,
         order_items: order.order_items,
+        // UI fields lấy từ snapshot
+        customer_name: order.address_snapshot?.full_name || '',
+        phone: order.address_snapshot?.phone || '',
+        full_address: [
+          order.address_snapshot?.street,
+          order.address_snapshot?.ward,
+          order.address_snapshot?.district,
+          order.address_snapshot?.province,
+        ]
+          .filter(Boolean)
+          .join(', '),
       }));
 
       setOrders(mapped);
@@ -38,7 +59,7 @@ export const useOrderHandlers = () => {
     }
   };
 
-  const handleConfirm = async (item: TableRow) => {
+  const handleConfirm = async (item: UIOrderRow) => {
     const confirmed = window.confirm('Bạn có chắc muốn xác nhận đơn hàng này?');
     if (!confirmed) return;
 
@@ -53,7 +74,7 @@ export const useOrderHandlers = () => {
     }
   };
 
-  const handleEdit = (item: TableRow) => {
+  const handleEdit = (item: UIOrderRow) => {
     alert(`Mở modal cập nhật đơn hàng: ${item.orderId}`);
   };
 

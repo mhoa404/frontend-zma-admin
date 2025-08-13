@@ -2,7 +2,7 @@
 import { useCategoryFormStore } from "../store/Category/categoryFormStore";
 import { useCategoryModalStore } from "../store/Category/categoryModalStore";
 import { useCategoryListStore } from "../store/Category/categoryListStore";
-import type { TableRow } from "../interfaces/TableRow.interface";
+import type { CategoryRow } from "../interfaces/Table/CategoryRow.interface";
 import { useCallback } from "react";
 import { createCategory, deleteCategory, fetchCategories, updateCategory } from "../scripts/categoryApi";
 
@@ -50,7 +50,7 @@ export const useCategoryHandlers = () => {
     await fetchAllCategories();
   };
 
-  const handleStartEdit = (item: TableRow) => {
+  const handleStartEdit = (item: CategoryRow) => {
     setEditForm({ name: item.name || '' });
     setEditingId(item._id?.toString() ?? null);
     setShowEditModal(true);

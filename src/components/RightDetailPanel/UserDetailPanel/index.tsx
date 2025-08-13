@@ -1,11 +1,11 @@
 import { formatDate } from '../../../utils/formatDate'
-import type { TableRow } from '../../../interfaces/TableRow.interface'
+import type { UserRow } from '../../../interfaces/Table/UserRow.interface'
 
 interface Props {
-  selectedItem: TableRow
+  selectedItem: UserRow
   onClose: () => void
   onDelete?: (id: string) => void
-  onEdit: (item: TableRow) => void;
+  onEdit: (item: UserRow) => void;
 }
 
 const UserDetailPanel = ({ onEdit, onDelete, selectedItem, onClose }: Props) => {

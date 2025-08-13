@@ -1,12 +1,12 @@
 import { formatCurrency } from '../../../utils/formatCurrency'
 import { formatDate } from '../../../utils/formatDate'
-import type { TableRow } from '../../../interfaces/TableRow.interface'
+import type { ProductRow } from '../../../interfaces/Table/ProductRow.interface'
 
 interface Props {
-  selectedItem: TableRow
+  selectedItem: ProductRow
   onClose: () => void
   onDelete?: (id: string) => void
-  onEdit: (item: TableRow) => void
+  onEdit: (item: ProductRow) => void
 }
 
 const ProductDetailPanel = ({ onEdit, onDelete, selectedItem, onClose }: Props) => {

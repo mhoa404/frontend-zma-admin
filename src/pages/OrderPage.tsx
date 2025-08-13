@@ -4,7 +4,8 @@ import TableComponent from '../components/Table';
 import TbodyOrders from '../components/Table/TbodyOrders';
 import { formatDate } from '../utils/formatDate';
 import { RightDetailPanel } from '../components/RightDetailPanel';
-import type { ColumnDef } from '../interfaces/TableRow.interface';
+import type { ColumnDef } from '../interfaces/ColumnDef.interface';
+import type { UIOrderRow } from '../interfaces/UIOrderRow.interface';
 
 const OrderPage = () => {
   const {
@@ -20,9 +21,15 @@ const OrderPage = () => {
     loadOrders();
   }, [loadOrders]);
 
-  const columns: ColumnDef[] = [
+  const columns: ColumnDef<UIOrderRow>[] = [
+    {
+      header: 'Tên người đặt',
+      field: 'customer_name',
+      render: (item) => item.customer_name?.trim() || item.orderId,
+    },
+    { header: 'SĐT', field: 'phone' },
     { header: 'Order ID', field: 'orderId' },
-    { header: 'Payment', field: 'name' },
+    { header: 'Payment', field: 'payment_method' },
     {
       header: 'Status',
       field: 'status',

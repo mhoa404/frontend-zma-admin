@@ -1,11 +1,12 @@
-import type { TableRow } from '../../../interfaces/TableRow.interface';
-import { cancelOrder } from '../../../scripts/orderApi';
+import type { OrderRow } from '../../../interfaces/Table/OrderRow.interface';
+import { updateOrderStatus } from '../../../scripts/orderApi';
+import type { OrderStatus } from '../../../types/order';
 
 interface Props {
-  selectedItem: TableRow;
+  selectedItem: OrderRow;
   onClose: () => void;
-  onEdit: (item: TableRow) => void;
-  onConfirm?: (item: TableRow) => void;
+  onEdit: (item: OrderRow) => void;
+  onConfirm?: (item: OrderRow) => void;
 }
 
 const OrderDetailPanel = ({
@@ -13,7 +14,7 @@ const OrderDetailPanel = ({
   onClose,
   onConfirm
 }: Props) => {
-  const { orderId, name, value, status = '', date, order_items } = selectedItem;
+  const { orderId, payment_method, value, status = '', date, order_items } = selectedItem;
 
   const lowerStatus = status.toLowerCase();
   const isConfirmed = lowerStatus === 'confirmed';
@@ -24,7 +25,7 @@ const OrderDetailPanel = ({
     if (!confirmed) return;
 
     try {
-      await cancelOrder(orderId?.toString() || '');
+      await updateOrderStatus(orderId?.toString() || '', 'cancelled' as OrderStatus);
       alert('✅ Đã huỷ đơn hàng');
       onClose();
     } catch (err) {
@@ -53,7 +54,7 @@ const OrderDetailPanel = ({
 
         <div>
           <span className="text-gray-500">Payment Method:</span>
-          <p className="text-gray-900">{name}</p>
+          <p className="text-gray-900">{payment_method}</p>
         </div>
 
         <div>

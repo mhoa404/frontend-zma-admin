@@ -16,7 +16,7 @@ import { fetchProducts, createProduct, updateProduct, deleteProduct } from '../s
 import { fetchCategories } from '../scripts/categoryApi';
 import { uploadImageToCloudinary } from '../scripts/uploadApi';
 import { parseAxiosError } from '../utils/parseAxiosError';
-import type { UIProductRow } from '../interfaces/TableRow.interface';
+import type { UIProductRow } from '../interfaces/UIProductRow.interface';
 
 export interface Category {
   _id: string;
