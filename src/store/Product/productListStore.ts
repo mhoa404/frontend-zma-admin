@@ -1,6 +1,6 @@
 import { createWithEqualityFn } from 'zustand/traditional';
 import { shallow } from 'zustand/shallow';
-import type { UIProductRow } from '../../interfaces/TableRow.interface';
+import type { UIProductRow } from '../../interfaces/UIProductRow.interface';
 
 type ProductListState = {
   products: UIProductRow[];

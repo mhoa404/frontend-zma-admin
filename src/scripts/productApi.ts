@@ -1,5 +1,5 @@
 import { BACKEND_API } from '../scripts/api';
-import type { UIProductRow } from '../interfaces/TableRow.interface';
+import type { UIProductRow } from '../interfaces/UIProductRow.interface';
 import axios from 'axios';
 
 type ProductWithPopulatedCategory = Omit<UIProductRow, 'category_id' | 'category_name'> & {

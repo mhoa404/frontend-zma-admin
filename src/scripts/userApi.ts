@@ -1,8 +1,8 @@
 // src/scripts/userApi.ts
 import api from "./api";
-import type { TableRow } from "../interfaces/TableRow.interface";
+import type { UserRow } from "../interfaces/Table/UserRow.interface";
 
-export const fetchUsers = async (): Promise<TableRow[]> => {
+export const fetchUsers = async (): Promise<UserRow[]> => {
   const res = await api.get("/users");
   return res.data;
 };

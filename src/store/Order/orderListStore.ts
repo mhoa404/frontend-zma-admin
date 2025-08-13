@@ -1,16 +1,16 @@
 import { createWithEqualityFn } from 'zustand/traditional';
 import { shallow } from 'zustand/shallow';
-import type { TableRow } from '../../interfaces/TableRow.interface';
+import type { OrderRow } from '../../interfaces/Table/OrderRow.interface';
 
 type OrderListState = {
-  orders: TableRow[];
-  selectedItem: TableRow | null;
+  orders: OrderRow[];
+  selectedItem: OrderRow | null;
   loading: boolean;
 };
 
 type OrderListActions = {
-  setOrders: (orders: TableRow[]) => void;
-  setSelectedItem: (item: TableRow | null) => void;
+  setOrders: (orders: OrderRow[]) => void;
+  setSelectedItem: (item: OrderRow | null) => void;
   setLoading: (loading: boolean) => void;
 };
 

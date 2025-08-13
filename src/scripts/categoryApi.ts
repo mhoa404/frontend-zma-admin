@@ -1,9 +1,9 @@
 // src/services/categoryApi.ts
 import { BACKEND_API } from '../scripts/api';
-import type { TableRow } from '../interfaces/TableRow.interface';
+import type { CategoryRow } from '../interfaces/Table/CategoryRow.interface';
 import axios from 'axios';
 
-export const fetchCategories = async (): Promise<TableRow[]> => {
+export const fetchCategories = async (): Promise<CategoryRow[]> => {
   const token = localStorage.getItem('access_token');
 
   try {

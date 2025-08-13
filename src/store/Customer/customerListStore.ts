@@ -1,16 +1,16 @@
 import { createWithEqualityFn } from 'zustand/traditional';
 import { shallow } from 'zustand/shallow';
-import type { TableRow } from '../../interfaces/TableRow.interface';
+import type { UserRow } from '../../interfaces/Table/UserRow.interface';
 
 type CustomerListState = {
-  users: TableRow[];
-  selectedItem: TableRow | null;
+  users: UserRow[];
+  selectedItem: UserRow | null;
   loading: boolean;
 };
 
 type CustomerListActions = {
-  setUsers: (users: TableRow[]) => void;
-  setSelectedItem: (item: TableRow | null) => void;
+  setUsers: (users: UserRow[]) => void;
+  setSelectedItem: (item: UserRow | null) => void;
   setLoading: (loading: boolean) => void;
 };
 

@@ -1,16 +1,16 @@
 import { createWithEqualityFn } from 'zustand/traditional';
 import { shallow } from 'zustand/shallow';
-import type { TableRow } from '../../interfaces/TableRow.interface';
+import type { CategoryRow } from '../../interfaces/Table/CategoryRow.interface';
 
 type CategoryListState = {
-  categories: TableRow[];
-  selectedItem: TableRow | null;
+  categories: CategoryRow[];
+  selectedItem: CategoryRow | null;
   loading: boolean;
 };
 
 type CategoryListActions = {
-  setCategories: (categories: TableRow[]) => void;
-  setSelectedItem: (item: TableRow | null) => void;
+  setCategories: (categories: CategoryRow[]) => void;
+  setSelectedItem: (item: CategoryRow | null) => void;
   setLoading: (loading: boolean) => void;
 };
 

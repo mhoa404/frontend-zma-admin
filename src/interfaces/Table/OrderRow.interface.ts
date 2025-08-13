@@ -1,3 +1,4 @@
+import type { OrderStatus } from '../../types/order';
 import type { OrderItem } from '../OrderItem.interface';
 
 export interface OrderRow {
@@ -6,7 +7,7 @@ export interface OrderRow {
   customerName?: string;
   zalo_id?: string;
   phone?: string;
-  status: string;
+  status: OrderStatus;
   value: string;
   date: string;
   payment_method?: string;
