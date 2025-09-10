@@ -34,6 +34,7 @@ const ProductPage = () => {
     resetForm,
     resetUpload,
     resetEditForm,
+    setImagePreviewUrl,
   } = useProductHandlers();
   const [showImagePicker, setShowImagePicker] = useState(false);
 
@@ -90,9 +91,8 @@ const ProductPage = () => {
 
       {/* Table */}
       <main
-        className={`p-6 transition-all duration-300 ease-in-out ${
-          selectedItem ? 'w-[calc(100%-320px)]' : 'w-full'
-        }`}
+        className={`p-6 transition-all duration-300 ease-in-out ${selectedItem ? 'w-[calc(100%-320px)]' : 'w-full'
+          }`}
       >
         <TableComponent
           columns={columns}
@@ -104,9 +104,8 @@ const ProductPage = () => {
       </main>
 
       <div
-        className={`w-80 h-full bg-white border-l border-gray-200 fixed right-0 top-0 z-50 transform transition-transform duration-300 ${
-          selectedItem ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`w-80 h-full bg-white border-l border-gray-200 fixed right-0 top-0 z-50 transform transition-transform duration-300 ${selectedItem ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         <RightDetailPanel
           selectedItem={selectedItem}
@@ -194,11 +193,19 @@ const ProductPage = () => {
           onClose={() => setShowImagePicker(false)}
           onSelect={(image) => {
             if (image?.file) {
+              // Người dùng chọn ảnh từ máy
               handleFileChange(image.file);
+            } else {
+              // Người dùng chọn ảnh từ thư viện
+              handleFileChange(null);
+              setForm({ ...form, img_url: image.src });
+              setEditForm({ ...editForm, img_url: image.src });
+              setImagePreviewUrl(image.src);
             }
             setShowImagePicker(false);
           }}
         />
+
       )}
     </div>
   );
