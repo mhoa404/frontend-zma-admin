@@ -82,8 +82,9 @@ export const useProductHandlers = () => {
     if (!form.category_id) return alert('⚠️ Vui lòng chọn danh mục');
 
     try {
-      let img_url = '';
-      let img_public_id = '';
+      // ✅ Giữ lại URL nếu không upload mới
+      let img_url = form.img_url || '';
+      let img_public_id = form.img_public_id || '';
 
       if (selectedFile) {
         const uploaded = await uploadImageToCloudinary(selectedFile);
@@ -111,6 +112,7 @@ export const useProductHandlers = () => {
       alert(parseAxiosError(err));
     }
   };
+
 
   const handleUpdateProduct = async () => {
     if (!editingId) return alert('❌ Thiếu ID sản phẩm');
@@ -234,5 +236,6 @@ export const useProductHandlers = () => {
     resetForm,
     resetEditForm,
     resetUpload,
+    setImagePreviewUrl,
   };
 };
