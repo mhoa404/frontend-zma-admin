@@ -93,7 +93,7 @@ const CustommerPage = () => {
 
       {/* Right panel */}
       <div
-        className={`w-80 h-full bg-white border-l border-gray-200 fixed right-0 top-0 z-50 transform transition-transform duration-300 ${
+        className={`w-80 h-full bg-white border-l3333 border-gray-200 fixed right-0 top-0 z-50 transform transition-transform duration-300 ${
           selectedItem ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
