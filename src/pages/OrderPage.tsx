@@ -14,9 +14,10 @@ const OrderPage = () => {
     loadOrders,
     handleEdit,
     handleConfirm,
+    handleShipping, 
     setSelectedItem,
+    handleCancel,
   } = useOrderHandlers();
-
   useEffect(() => {
     loadOrders();
   }, [loadOrders]);
@@ -35,15 +36,14 @@ const OrderPage = () => {
       field: 'status',
       render: (item) => (
         <span
-          className={`text-xs font-medium px-2 py-1 rounded-full ${
-            item.status === 'completed'
+          className={`text-xs font-medium px-2 py-1 rounded-full ${item.status === 'completed'
               ? 'bg-green-100 text-green-800'
               : item.status === 'pending'
-              ? 'bg-yellow-100 text-yellow-800'
-              : item.status === 'cancelled'
-              ? 'bg-gray-300 text-gray-800'
-              : 'bg-red-100 text-red-800'
-          }`}
+                ? 'bg-yellow-100 text-yellow-800'
+                : item.status === 'cancelled'
+                  ? 'bg-gray-300 text-gray-800'
+                  : 'bg-red-100 text-red-800'
+            }`}
         >
           {item.status}
         </span>
@@ -64,9 +64,8 @@ const OrderPage = () => {
       </div>
 
       <main
-        className={`p-6 pt-4 transition-all duration-300 ease-in-out ${
-          selectedItem ? 'w-[calc(100%-320px)]' : 'w-full'
-        }`}
+        className={`p-6 pt-4 transition-all duration-300 ease-in-out ${selectedItem ? 'w-[calc(100%-320px)]' : 'w-full'
+          }`}
       >
         <TableComponent
           columns={columns}
@@ -78,9 +77,8 @@ const OrderPage = () => {
       </main>
 
       <div
-        className={`w-80 h-full bg-white border-l border-gray-200 fixed right-0 top-0 z-50 transform transition-transform duration-300 ${
-          selectedItem ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`w-80 h-full bg-white border-l border-gray-200 fixed right-0 top-0 z-50 transform transition-transform duration-300 ${selectedItem ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         <RightDetailPanel
           selectedItem={selectedItem}
@@ -92,6 +90,8 @@ const OrderPage = () => {
           }}
           onEdit={handleEdit}
           onConfirm={handleConfirm}
+          onShipping={handleShipping} 
+          onCancel={handleCancel}
         />
       </div>
     </div>

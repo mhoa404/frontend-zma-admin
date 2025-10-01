@@ -9,8 +9,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RedirectIfAuth from './components/RedirectIfAuth.tsx';
 import RequireAuth from './components/RequireAuth';
-import RegisterPage from './pages/RegisterPage.tsx';
-
+import RegisterPage from './pages/RegisterPage.tsx'
 
 const App = () => (
   <BrowserRouter>

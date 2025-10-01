@@ -1,22 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
-import {
-  useProductListStore,
-} from '../store/Product/productListStore';
-import {
-  useProductFormStore,
-} from '../store/Product/productFormStore';
-import {
-  useProductModalStore,
-} from '../store/Product/productModalStore';
-import {
-  useProductUploadStore,
-} from '../store/Product/productUploadStore';
+
 
 import { fetchProducts, createProduct, updateProduct, deleteProduct } from '../scripts/productApi';
 import { fetchCategories } from '../scripts/categoryApi';
 import { uploadImageToCloudinary } from '../scripts/uploadApi';
 import { parseAxiosError } from '../utils/parseAxiosError';
 import type { UIProductRow } from '../interfaces/UIProductRow.interface';
+import { useProductFormStore } from '../store/Product/productFormStore';
+import { useProductModalStore } from '../store/Product/productModalStore';
+import { useProductUploadStore } from '../store/Product/productUploadStore';
+import { useProductListStore } from '../store/Product/productListStore';
+
 
 export interface Category {
   _id: string;
@@ -79,7 +73,7 @@ export const useProductHandlers = () => {
   }, [loadProducts, loadCategories]);
 
   const handleCreateProduct = async () => {
-    if (!form.category_id) return alert('⚠️ Vui lòng chọn danh mục');
+    if (!form.category_id) return alert('Vui lòng chọn danh mục');
 
     try {
       // ✅ Giữ lại URL nếu không upload mới
@@ -102,7 +96,7 @@ export const useProductHandlers = () => {
         img_public_id,
       });
 
-      alert('✅ Tạo sản phẩm thành công');
+      alert('Tạo sản phẩm thành công');
       resetForm();
       resetUpload();
       setShowModal(false);
@@ -115,7 +109,7 @@ export const useProductHandlers = () => {
 
 
   const handleUpdateProduct = async () => {
-    if (!editingId) return alert('❌ Thiếu ID sản phẩm');
+    if (!editingId) return alert('Thiếu ID sản phẩm');
 
     try {
       let img_url = editForm.img_url;

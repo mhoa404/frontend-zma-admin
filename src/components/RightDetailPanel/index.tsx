@@ -14,36 +14,39 @@ type CommonHandlers = {
 
 type RightDetailPanelProps =
   | ({
-      activeMenu: 'Users'
-      selectedItem: UserRow | null // ✅ cho phép null
-      onDelete?: (id: string) => void
-      onEdit: (item: UserRow) => void
-      getStatusColor?: (status: boolean) => string
-    } & CommonHandlers)
+    activeMenu: 'Users'
+    selectedItem: UserRow | null 
+    onDelete?: (id: string) => void
+    onEdit: (item: UserRow) => void
+    getStatusColor?: (status: boolean) => string
+  } & CommonHandlers)
   | ({
-      activeMenu: 'Categories'
-      selectedItem: CategoryRow | null // ✅ cho phép null
-      getStatusColor: (status: boolean) => string
-      onDelete?: (id: string) => void
-      onEdit: (item: CategoryRow) => void
-    } & CommonHandlers)
+    activeMenu: 'Categories'
+    selectedItem: CategoryRow | null 
+    getStatusColor: (status: boolean) => string
+    onDelete?: (id: string) => void
+    onEdit: (item: CategoryRow) => void
+  } & CommonHandlers)
   | ({
-      activeMenu: 'Orders'
-      selectedItem: OrderRow | null // ✅ cho phép null
-      onEdit: (item: OrderRow) => void
-      onConfirm?: (item: OrderRow) => void
-      getStatusColor?: (status: boolean) => string
-    } & CommonHandlers)
+    activeMenu: 'Orders'
+    selectedItem: OrderRow | null
+    onEdit: (item: OrderRow) => void
+    onConfirm?: (item: OrderRow) => void
+    onShipping?: (item: OrderRow) => void 
+    onCancel?: (item: OrderRow) => void 
+    getStatusColor?: (status: boolean) => string
+  } & CommonHandlers)
+
   | ({
-      activeMenu: 'Products'
-      selectedItem: ProductRow | null // ✅ cho phép null
-      onDelete?: (id: string) => void
-      onEdit: (item: ProductRow) => void
-      getStatusColor?: (status: boolean) => string
-    } & CommonHandlers)
+    activeMenu: 'Products'
+    selectedItem: ProductRow | null 
+    onDelete?: (id: string) => void
+    onEdit: (item: ProductRow) => void
+    getStatusColor?: (status: boolean) => string
+  } & CommonHandlers)
 
 export const RightDetailPanel = (props: RightDetailPanelProps) => {
-  if (!props.selectedItem) return null // ✅ tránh render khi chưa chọn
+  if (!props.selectedItem) return null 
 
   switch (props.activeMenu) {
     case 'Users':
@@ -72,10 +75,12 @@ export const RightDetailPanel = (props: RightDetailPanelProps) => {
         <OrderDetailPanel
           selectedItem={props.selectedItem}
           onClose={props.onClose}
-          onEdit={props.onEdit}
           onConfirm={props.onConfirm}
+          onShipping={props.onShipping} 
+          onCancel={props.onCancel}
         />
       )
+
 
     case 'Products':
     default:

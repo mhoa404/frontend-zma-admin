@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useProductHandlers } from '../hooks/useProductHandlers';
 import TableComponent from '../components/Table';
 import TbodyProducts from '../components/Table/TBodyProduct';
 import { getStatusColor } from '../utils/statusColor';
@@ -10,7 +9,7 @@ import ImagePickerModal from '../components/ImagePickerModal';
 import type { ColumnDef } from '../interfaces/ColumnDef.interface';
 import type { UIProductRow } from '../interfaces/UIProductRow.interface';
 import type { ProductRow } from '../interfaces/Table/ProductRow.interface';
-
+import { useProductHandlers } from '../hooks/useProductHandlers';
 const ProductPage = () => {
   const {
     products,

@@ -1,114 +1,106 @@
+import { formatDate } from '../../../utils/formatDate';
 import type { OrderRow } from '../../../interfaces/Table/OrderRow.interface';
-import { updateOrderStatus } from '../../../scripts/orderApi';
-import type { OrderStatus } from '../../../types/order';
+import type { JSX } from 'react';
 
 interface Props {
   selectedItem: OrderRow;
   onClose: () => void;
-  onEdit: (item: OrderRow) => void;
   onConfirm?: (item: OrderRow) => void;
+  onShipping?: (item: OrderRow) => void;
+  onCancel?: (item: OrderRow) => void;
 }
 
-const OrderDetailPanel = ({
-  selectedItem,
-  onClose,
-  onConfirm
-}: Props) => {
-  const { orderId, payment_method, value, status = '', date, order_items } = selectedItem;
+const OrderDetailPanel = ({ selectedItem, onClose, onConfirm, onShipping, onCancel }: Props) => {
+  const renderActions = () => {
+    if (selectedItem.status === 'cancelled') return null;
 
-  const lowerStatus = status.toLowerCase();
-  const isConfirmed = lowerStatus === 'confirmed';
-  const isCompleted = lowerStatus === 'completed';
+    const actions: JSX.Element[] = [];
 
-  const handleCancel = async () => {
-    const confirmed = window.confirm('Bạn có chắc muốn huỷ đơn hàng này?');
-    if (!confirmed) return;
-
-    try {
-      await updateOrderStatus(orderId?.toString() || '', 'cancelled' as OrderStatus);
-      alert('✅ Đã huỷ đơn hàng');
-      onClose();
-    } catch (err) {
-      console.error('❌ Lỗi huỷ đơn:', err);
-      alert('❌ Không thể huỷ đơn hàng');
+    if (selectedItem.status === 'pending') {
+      if (onConfirm) {
+        actions.push(
+          <button
+            key="confirm"
+            onClick={() => onConfirm(selectedItem)}
+            className="w-full border-2 border-green-600 text-green-600 py-2 px-4 rounded-lg hover:bg-green-600 hover:text-white"
+          >
+            Xác nhận đơn
+          </button>
+        );
+      }
+      if (onCancel) {
+        actions.push(
+          <button
+            key="cancel"
+            onClick={() => onCancel(selectedItem)}
+            className="w-full border-2 border-red-600 text-red-600 py-2 px-4 rounded-lg hover:bg-red-600 hover:text-white"
+          >
+            Huỷ đơn
+          </button>
+        );
+      }
     }
+
+    if (selectedItem.status === 'confirmed' && onShipping) {
+      actions.push(
+        <button
+          key="shipping"
+          onClick={() => onShipping(selectedItem)}
+          className="w-full border-2 border-blue-600 text-blue-600 py-2 px-4 rounded-lg hover:bg-blue-600 hover:text-white"
+        >
+          Chuyển sang đang giao
+        </button>
+      );
+    }
+
+    return actions;
   };
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-gray-900">Order Detail</h2>
-        <button
-          onClick={onClose}
-          className="text-xl text-gray-400 hover:text-gray-600"
-        >
-          ×
-        </button>
+      <div className="pl-3 h-20 border-b border-gray-200">
+        <div className="flex items-center p-3 justify-between">
+          <h3 className="text-2xl font-bold text-gray-900">Order Details</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl">×</button>
+        </div>
       </div>
 
-      <div className="p-6 space-y-4 overflow-y-auto text-sm">
+      <div className="flex-1 p-6 overflow-y-auto space-y-4 text-sm">
         <div>
-          <span className="text-gray-500">Order ID:</span>
-          <p className="text-gray-900 font-medium">{orderId}</p>
+          <h5 className="font-medium text-gray-900">Người đặt</h5>
+          <p>{selectedItem.customer_name || '-'}</p>
         </div>
-
         <div>
-          <span className="text-gray-500">Payment Method:</span>
-          <p className="text-gray-900">{payment_method}</p>
+          <h5 className="font-medium text-gray-900">Số điện thoại</h5>
+          <p>{selectedItem.phone || '-'}</p>
         </div>
-
         <div>
-          <span className="text-gray-500">Total:</span>
-          <p className="text-gray-900">{value}</p>
+          <h5 className="font-medium text-gray-900">Địa chỉ</h5>
+          <p>{selectedItem.full_address || '-'}</p>
         </div>
-
         <div>
-          <span className="text-gray-500">Status:</span>
-          <p className="text-gray-900 capitalize">{status}</p>
+          <h5 className="font-medium text-gray-900">Tổng tiền</h5>
+          <p>{selectedItem.value}</p>
         </div>
-
         <div>
-          <span className="text-gray-500">Created At:</span>
-          <p className="text-gray-900">{date?.toString()}</p>
+          <h5 className="font-medium text-gray-900">Phương thức thanh toán</h5>
+          <p>{selectedItem.payment_method}</p>
         </div>
-
-        {Array.isArray(order_items) && order_items.length > 0 && (
-          <div>
-            <span className="text-gray-500">Sản phẩm đã đặt:</span>
-            <ul className="mt-1 list-disc ml-5 space-y-1 text-gray-900 text-sm">
-              {order_items.map((item, index) => (
-                <li key={index}>
-                  {item.quantity} x {item.name} – {(item.price * item.quantity).toLocaleString()}₫
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <div>
+          <h5 className="font-medium text-gray-900">Trạng thái</h5>
+          <p>{selectedItem.status}</p>
+        </div>
+        <div>
+          <h5 className="font-medium text-gray-900">Ngày tạo</h5>
+          <p>{formatDate(selectedItem.date)}</p>
+        </div>
       </div>
 
-      <div className="p-6 mt-auto border-t border-gray-200 space-y-2">
-        {onConfirm && (
-          <button
-            disabled={isCompleted}
-            onClick={() => onConfirm(selectedItem)}
-            className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${isCompleted
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 text-white'
-              }`}
-          >
-            {isConfirmed ? 'Đang giao hàng' : 'Xác nhận đơn hàng'}
-          </button>
-        )}
-
-        {!isConfirmed && (
-          <button
-            onClick={handleCancel}
-            className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md"
-          >
-            Huỷ đơn hàng
-          </button>
-        )}
-      </div>
+      {renderActions() && (
+        <div className="p-6 border-t border-gray-200 space-y-2">
+          {renderActions()}
+        </div>
+      )}
     </div>
   );
 };
