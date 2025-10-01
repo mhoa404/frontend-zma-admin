@@ -8,7 +8,7 @@ const Layout = () => {
 
   const getActiveMenu = () => {
     const segments = location.pathname.split('/')
-    return segments[1]?.charAt(0).toUpperCase() + segments[1]?.slice(1) || 'Bảng Điều Khiển Admin'
+    return segments[1]?.charAt(0).toUpperCase() + segments[1]?.slice(1) || 'Dashboard'
   }
 
   return (

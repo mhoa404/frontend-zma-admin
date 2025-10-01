@@ -5,5 +5,5 @@ export interface UserRow {
   email: string;
   phone?: string;
   role: string;
-  create_at?: Date | string;
+  createAt?: Date | string;
 }

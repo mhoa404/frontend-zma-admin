@@ -58,8 +58,8 @@ const CustommerPage = () => {
     },
     {
       header: 'Ngày tạo',
-      field: 'create_at',
-      render: (item) => formatDate(item.create_at!),
+      field: 'createAt',
+      render: (item) => formatDate(item.createAt!),
     },
   ];
 

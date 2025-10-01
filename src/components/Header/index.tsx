@@ -11,7 +11,7 @@ const Header = ({ activeMenu }: HeaderProps) => {
             {activeMenu}
           </h1>
           <p className="text-sm text-gray-600">
-            Quản lý bán hàng và thống kê kinh doanh {activeMenu} here
+            Quản lý bán hàng và thống kê kinh doanh {activeMenu}
           </p>
         </div>
       </div>
