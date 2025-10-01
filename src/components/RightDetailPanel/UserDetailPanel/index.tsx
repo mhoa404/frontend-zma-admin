@@ -41,7 +41,7 @@ const UserDetailPanel = ({ onEdit, onDelete, selectedItem, onClose }: Props) => 
 
         <div>
           <h5 className="font-medium text-gray-900">Ngày tạo</h5>
-          <p>{selectedItem.create_at ? formatDate(selectedItem.create_at) : 'Không rõ'}</p>
+          <p>{selectedItem.createAt ? formatDate(selectedItem.createAt) : 'Không rõ'}</p>
         </div>
       </div>
 
