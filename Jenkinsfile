@@ -32,8 +32,6 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-cred',
                     usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh """
-                        mkdir -p ${SERVER_DIR}
-                        cp docker-compose.yml ${SERVER_DIR}/docker-compose.yml
                         cd ${SERVER_DIR}
                         echo "$DOCKER_PASS" | docker login -u $DOCKER_USER --password-stdin
                         docker compose pull frontend
