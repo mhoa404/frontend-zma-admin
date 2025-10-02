@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         IMAGE_NAME = "frontend-zma"
-        SERVER_DIR = "/opt/zmp/admin-zma"
+        SERVER_DIR = "/root/zmp-server/admin-zma"
     }
     stages {
         stage('Checkout') {
