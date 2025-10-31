@@ -43,6 +43,9 @@ const HomePage = () => {
   const [inventoryData, setInventoryData] = useState<Inventory[]>([]);
   const [exportData, setExportData] = useState<ExportData[]>([]);
   const [focused, setFocused] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string>(() =>
+    new Date().toISOString().split("T")[0]
+  );
 
   const mockData = {
     day: {
@@ -168,8 +171,7 @@ const HomePage = () => {
     setSalesData(data.sales);
     setInventoryData(data.inventory);
     setExportData(data.export);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeFilter]);
+  }, [timeFilter, selectedDate]);
 
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat("vi-VN", {
@@ -186,6 +188,29 @@ const HomePage = () => {
     (sum, item) => sum + item.quantity,
     0
   );
+
+  const getCurrentLabel = (): string => {
+    const now = new Date(selectedDate);
+
+    switch (timeFilter) {
+      case "day":
+        return `Ngày ${now.toLocaleDateString("vi-VN")}`;
+      case "week": {
+        const day = now.getDay() || 7;
+        const firstDay = new Date(now);
+        firstDay.setDate(now.getDate() - day + 1);
+        const lastDay = new Date(firstDay);
+        lastDay.setDate(firstDay.getDate() + 6);
+        return `Tuần: ${firstDay.toLocaleDateString("vi-VN")} - ${lastDay.toLocaleDateString("vi-VN")}`;
+      }
+      case "month":
+        return `Tháng ${now.getMonth() + 1} năm ${now.getFullYear()}`;
+      case "year":
+        return `Năm ${now.getFullYear()}`;
+      default:
+        return "";
+    }
+  };
 
   const CustomTooltip: React.FC<CustomTooltipProps> = ({
     active,
@@ -219,22 +244,57 @@ const HomePage = () => {
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Time Filter */}
-        <div className="mb-6 flex items-center space-x-2">
-          <Filter className="h-5 w-5 text-gray-700" />
-          <select
-            value={timeFilter}
-            onChange={(e) => setTimeFilter(e.target.value as TimeFilter)}
-            onBlur={() => setFocused(false)}
-            className={`px-4 py-2 border rounded-lg bg-white text-gray-800 focus:outline-none focus:ring-2 transition ${
-              focused ? "border-blue-500 ring-blue-500" : "border-gray-300"
-            }`}
-          >
-            <option value="day">Theo Ngày</option>
-            <option value="week">Theo Tuần</option>
-            <option value="month">Theo Tháng</option>
-            <option value="year">Theo Năm</option>
-          </select>
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:space-x-3 space-y-3 sm:space-y-0">
+          <div className="flex items-center space-x-2">
+            <Filter className="h-5 w-5 text-gray-700" />
+            <select
+              value={timeFilter}
+              onChange={(e) => setTimeFilter(e.target.value as TimeFilter)}
+              onBlur={() => setFocused(false)}
+              className={`px-4 py-2 border rounded-lg bg-white text-gray-800 focus:outline-none focus:ring-2 transition ${
+                focused ? "border-blue-500 ring-blue-500" : "border-gray-300"
+              }`}
+            >
+              <option value="day">Theo Ngày</option>
+              <option value="week">Theo Tuần</option>
+              <option value="month">Theo Tháng</option>
+              <option value="year">Theo Năm</option>
+            </select>
+          </div>
+
+          {/* Date selector */}
+          <div>
+            {timeFilter === "day" && (
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="border border-gray-300 rounded-lg px-3 py-2 bg-white text-gray-800"
+              />
+            )}
+            {timeFilter === "month" && (
+              <input
+                type="month"
+                value={selectedDate.slice(0, 7)}
+                onChange={(e) => setSelectedDate(e.target.value + "-01")}
+                className="border border-gray-300 rounded-lg px-3 py-2 bg-white text-gray-800"
+              />
+            )}
+            {timeFilter === "year" && (
+              <input
+                type="number"
+                min="2000"
+                max={new Date().getFullYear()}
+                value={selectedDate.slice(0, 4)}
+                onChange={(e) => setSelectedDate(`${e.target.value}-01-01`)}
+                className="border border-gray-300 rounded-lg px-3 py-2 bg-white text-gray-800 w-28"
+              />
+            )}
+          </div>
         </div>
+
+        {/* Hiển thị ngày / tháng / năm đang xem */}
+        <p className="text-gray-600 text-sm mb-4">{getCurrentLabel()}</p>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-3 gap-6 mb-8">

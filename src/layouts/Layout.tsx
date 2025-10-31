@@ -16,7 +16,9 @@ const Layout = () => {
       <Sidebar resetSelectedItem={() => {}} />
       <div className="flex-1 flex flex-col">
         <Header activeMenu={getActiveMenu()} />
+        <div className="mt-20">
         <Outlet />
+        </div>
       </div>
     </div>
   )

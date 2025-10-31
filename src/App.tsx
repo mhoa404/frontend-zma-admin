@@ -10,6 +10,9 @@ import LoginPage from './pages/LoginPage';
 import RedirectIfAuth from './components/RedirectIfAuth.tsx';
 import RequireAuth from './components/RequireAuth';
 import RegisterPage from './pages/RegisterPage.tsx'
+import NotiPage from './pages/NotiPage.tsx';
+import HelpPage from './pages/HelpPage.tsx';
+import SettingPage from './pages/SettingPage.tsx';
 
 const App = () => (
   <BrowserRouter>
@@ -26,6 +29,9 @@ const App = () => (
           <Route path="/categories" element={<CategoryPage />} />
           <Route path="/customers" element={<CustomerPage />} />
           <Route path="/shippers" element={<ShipperPage />} />
+          <Route path="/notification" element={<NotiPage />} />
+          <Route path="/help" element={<HelpPage />} />
+          <Route path="/settings" element={<SettingPage />} />
           <Route path="/orders" element={<OrderPage />} />
         </Route>
       </Route>
