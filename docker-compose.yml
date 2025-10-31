@@ -2,6 +2,9 @@ version: '3.8'
 
 services:
   frontend-zma-admin:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: mhoa404/frontend-zma-admin:latest
     container_name: frontend-zma-admin
     ports:
